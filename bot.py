@@ -159,10 +159,8 @@ class BotManager:
             logger.error(f"Failed to call get_me for bot {bot_id}: {e}")
             await bot.session.close()
             from aiogram.exceptions import TelegramUnauthorizedError
-            is_unauthorized = False
-            if isinstance(e, TelegramUnauthorizedError) or "unauthorized" in str(e).lower() or "token" in str(e).lower():
-                is_unauthorized = True
-            if is_unauthorized:
+            from aiogram.utils.token import TokenValidationError
+            if isinstance(e, (TelegramUnauthorizedError, TokenValidationError)):
                 logger.warning(f"Deactivating bot ID {bot_id} in DB due to auth error.")
                 db_manager.update_postbot_active_status(bot_id, 0)
                 await self.notify_bot_disabled(bot_id, str(e))
@@ -258,10 +256,8 @@ class BotManager:
             logger.error(f"Failed to setup bot ID {bot_id} on startup: {e}")
             await bot.session.close()
             from aiogram.exceptions import TelegramUnauthorizedError
-            is_unauthorized = False
-            if isinstance(e, TelegramUnauthorizedError) or "unauthorized" in str(e).lower() or "token" in str(e).lower():
-                is_unauthorized = True
-            if is_unauthorized:
+            from aiogram.utils.token import TokenValidationError
+            if isinstance(e, (TelegramUnauthorizedError, TokenValidationError)):
                 logger.warning(f"Deactivating bot ID {bot_id} in DB due to auth error on startup.")
                 db_manager.update_postbot_active_status(bot_id, 0)
                 await self.notify_bot_disabled(bot_id, str(e))

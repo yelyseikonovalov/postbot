@@ -120,10 +120,8 @@ class PostScheduler:
                             except Exception as post_err:
                                 logger.error(f"Error executing post for group {group_id} ({name}): {post_err}")
                                 from aiogram.exceptions import TelegramUnauthorizedError
-                                is_unauthorized = False
-                                if isinstance(post_err, TelegramUnauthorizedError) or "unauthorized" in str(post_err).lower() or "token" in str(post_err).lower():
-                                    is_unauthorized = True
-                                if is_unauthorized:
+                                from aiogram.utils.token import TokenValidationError
+                                if isinstance(post_err, (TelegramUnauthorizedError, TokenValidationError)):
                                     logger.warning(f"Deactivating bot ID {bot_id} in scheduler due to error: {post_err}")
                                     db_manager.update_postbot_active_status(bot_id, 0)
                                     await self.bot_manager.stop_bot(bot_id)
