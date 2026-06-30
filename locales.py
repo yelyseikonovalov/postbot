@@ -164,12 +164,16 @@ Quickly copies all post groups, linked channels, settings (intervals, active hou
             "🤖 <b>Bot Username:</b> @{username}\n"
             "👑 <b>Owner:</b> @{owner}\n"
             "🔑 <b>Token:</b> <code>{token}</code>\n"
-            "🌐 <b>Proxy:</b> <code>{proxy}</code>"
+            "🌐 <b>Proxy:</b> <code>{proxy}</code>\n"
+            "⚡ <b>Status:</b> {status}"
         ),
         'btn_update_data': "🔄 Update Data",
         'btn_delete_bot': "🗑️ Delete Bot",
         'delete_confirm': "⚠️ Are you sure you want to delete <b>@{username}</b> from the database? This will stop the bot and delete its configuration.",
         'bot_deleted': "🗑️ Bot successfully deleted.",
+        'btn_activate_bot': "🟢 Activate Bot",
+        'btn_deactivate_bot': "🔴 Deactivate Bot",
+        'bot_disabled_warning': "⚠️ Warning! Postbot <b>@{username}</b> has been automatically deactivated in the system because it is blocked or the token is invalid.\n\nError details: <code>{error}</code>",
         
         # Admin Management (Control Bot & PostBot Admins)
         'admin_list_title': "👥 <b>Administrators:</b>",
@@ -537,12 +541,16 @@ Quickly copies all post groups, linked channels, settings (intervals, active hou
             "🤖 <b>Юзернейм бота:</b> @{username}\n"
             "👑 <b>Владелец:</b> @{owner}\n"
             "🔑 <b>Токен:</b> <code>{token}</code>\n"
-            "🌐 <b>Прокси:</b> <code>{proxy}</code>"
+            "🌐 <b>Прокси:</b> <code>{proxy}</code>\n"
+            "⚡ <b>Статус:</b> {status}"
         ),
         'btn_update_data': "🔄 Обновить данные",
         'btn_delete_bot': "🗑️ Удалить бота",
                 'delete_confirm': "⚠️ Вы уверены, что хотите удалить <b>@{username}</b> из базы данных? Это остановит его работу и удалит все его настройки.",
         'bot_deleted': "🗑️ Постбот успешно удален.",
+        'btn_activate_bot': "🟢 Активировать бота",
+        'btn_deactivate_bot': "🔴 Деактивировать бота",
+        'bot_disabled_warning': "⚠️ Внимание! Постбот <b>@{username}</b> был автоматически отключен в системе, так как он заблокирован или его токен недействителен.\n\nДетали ошибки: <code>{error}</code>",
         
         # Admin Management (Control Bot & PostBot Admins)
         'admin_list_title': "👥 <b>Администраторы:</b>",
@@ -974,12 +982,16 @@ Quickly copies all post groups, linked channels, settings (intervals, active hou
             "🤖 <b>שם משתמש של הבוט:</b> @{username}\n"
             "👑 <b>בעלים:</b> @{owner}\n"
             "🔑 <b>טוקן:</b> <code>{token}</code>\n"
-            "🌐 <b>פרוקסי:</b> <code>{proxy}</code>"
+            "🌐 <b>פרוקסי:</b> <code>{proxy}</code>\n"
+            "⚡ <b>סטטוס:</b> {status}"
         ),
         'btn_update_data': "🔄 עדכן נתונים",
         'btn_delete_bot': "🗑️ מחק בוט",
         'delete_confirm': "⚠️ האם אתה בטוח שברצונך למחוק את <b>@{username}</b> מהמסד נתונים? פעולה זו תעצור את הבוט ותמחק את הגדרותיו.",
         'bot_deleted': "🗑️ הבוט נמחק בהצלחה.",
+        'btn_activate_bot': "🟢 הפעל בוט",
+        'btn_deactivate_bot': "🔴 השבת בוט",
+        'bot_disabled_warning': "⚠️ אזהרה! בוט הפוסטים <b>@{username}</b> הושבת באופן אוטומטי במערכת מכיוון שהוא חסום או שהטוקן שלו אינו תקף.\n\nפרטי השגיאה: <code>{error}</code>",
         
         # Admin Management
         'admin_list_title': "👥 <b>מנהלי המערכת:</b>",

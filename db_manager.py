@@ -224,6 +224,15 @@ def init_db():
     except Exception as migration_err:
         logger.error(f"Migration error for post_groups: {migration_err}")
         
+    try:
+        cursor.execute("PRAGMA table_info(postbots)")
+        cols = [col[1] for col in cursor.fetchall()]
+        if "is_active" not in cols:
+            logger.info("Adding is_active column to postbots table...")
+            cursor.execute("ALTER TABLE postbots ADD COLUMN is_active INTEGER DEFAULT 1")
+    except Exception as migration_err2:
+        logger.error(f"Migration error for postbots: {migration_err2}")
+        
     # Table to track dispatched promo posts and their expiration
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS promo_posts (
@@ -458,6 +467,13 @@ def update_postbot_username(bot_id, username):
     conn = get_connection()
     cursor = conn.cursor()
     cursor.execute("UPDATE postbots SET username = ? WHERE bot_id = ?", (username, bot_id))
+    conn.commit()
+    conn.close()
+
+def update_postbot_active_status(bot_id, is_active):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("UPDATE postbots SET is_active = ? WHERE bot_id = ?", (is_active, bot_id))
     conn.commit()
     conn.close()
 

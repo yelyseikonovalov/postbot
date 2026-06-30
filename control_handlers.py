@@ -515,15 +515,23 @@ async def process_bot_card(callback: CallbackQuery, bot_id: int = None):
             owner_username = adm[1]
             break
             
+    status_str = "🟢 Active" if bot_row[4] == 1 else "🔴 Inactive"
+    
     text = t(
         'bot_card', lang,
         username=bot_row[2],
         owner=owner_username,
         token=bot_row[1],
-        proxy=bot_row[3] or "None"
+        proxy=bot_row[3] or "None",
+        status=status_str
     )
     
     builder = InlineKeyboardBuilder()
+    if bot_row[4] == 1:
+        builder.button(text=t('btn_deactivate_bot', lang), callback_data=f"ctl_bot_deactivate_{bot_id}", style="danger")
+    else:
+        builder.button(text=t('btn_activate_bot', lang), callback_data=f"ctl_bot_activate_{bot_id}", style="success")
+        
     builder.button(text=t('btn_update_data', lang), callback_data=f"ctl_bot_update_{bot_id}", style="primary")
     builder.button(text=t('btn_manage_bot_admins', lang), callback_data=f"ctl_bot_admins_{bot_id}", style="primary")
     builder.button(text=t('btn_delete_bot', lang), callback_data=f"ctl_bot_delconf_{bot_id}", style="danger")
@@ -532,6 +540,50 @@ async def process_bot_card(callback: CallbackQuery, bot_id: int = None):
     
     await callback.message.edit_text(text, reply_markup=builder.as_markup())
     await callback.answer()
+
+@control_router.callback_query(F.data.startswith("ctl_bot_deactivate_"))
+async def process_bot_deactivate(callback: CallbackQuery, bot_manager):
+    user_id = callback.from_user.id
+    lang = db_manager.get_user_lang(user_id)
+    if not db_manager.is_admin(user_id):
+        await callback.answer(t('not_authorized', lang), show_alert=True)
+        return
+        
+    bot_id = int(callback.data.split("_")[3])
+    
+    db_manager.update_postbot_active_status(bot_id, 0)
+    await bot_manager.stop_bot(bot_id)
+    
+    await callback.answer("Bot deactivated successfully.", show_alert=True)
+    await process_bot_card(callback, bot_id=bot_id)
+
+@control_router.callback_query(F.data.startswith("ctl_bot_activate_"))
+async def process_bot_activate(callback: CallbackQuery, bot_manager):
+    user_id = callback.from_user.id
+    lang = db_manager.get_user_lang(user_id)
+    if not db_manager.is_admin(user_id):
+        await callback.answer(t('not_authorized', lang), show_alert=True)
+        return
+        
+    bot_id = int(callback.data.split("_")[3])
+    bot_row = db_manager.get_postbot(bot_id)
+    if not bot_row:
+        await callback.answer("Bot not found.", show_alert=True)
+        return
+        
+    token, proxy = bot_row[1], bot_row[3]
+    
+    await callback.message.edit_text("🔄 <i>Testing bot connection...</i>")
+    success, result = await test_bot_connection(token, proxy, user_id)
+    
+    if success:
+        db_manager.update_postbot_active_status(bot_id, 1)
+        await bot_manager.start_bot(bot_id, token, proxy)
+        await callback.answer("Bot activated and started successfully.", show_alert=True)
+    else:
+        await callback.answer(f"❌ Failed to activate bot. Connection test failed:\n\n{result}", show_alert=True)
+        
+    await process_bot_card(callback, bot_id=bot_id)
 
 # Update Bot Username
 @control_router.callback_query(F.data.startswith("ctl_bot_update_"))

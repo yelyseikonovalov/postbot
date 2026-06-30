@@ -54,6 +54,7 @@ class BotManager:
         self.running_bots = {}   # bot_id -> Bot
         self.polling_task = None  # asyncio.Task for dynamic polling
         self.db_check_task = None # asyncio.Task for periodic DB polling
+        self.control_bot = None   # Will be set in main()
 
     def start_db_polling(self):
         if not self.db_check_task:
@@ -157,11 +158,43 @@ class BotManager:
         except Exception as e:
             logger.error(f"Failed to call get_me for bot {bot_id}: {e}")
             await bot.session.close()
+            from aiogram.exceptions import TelegramUnauthorizedError
+            is_unauthorized = False
+            if isinstance(e, TelegramUnauthorizedError) or "unauthorized" in str(e).lower() or "token" in str(e).lower():
+                is_unauthorized = True
+            if is_unauthorized:
+                logger.warning(f"Deactivating bot ID {bot_id} in DB due to auth error.")
+                db_manager.update_postbot_active_status(bot_id, 0)
+                await self.notify_bot_disabled(bot_id, str(e))
             return
             
         self.running_bots[bot_id] = bot
         logger.info(f"Dynamic PostBot @{me.username} (ID: {bot_id}) registered.")
         await self.restart_polling()
+
+    async def notify_bot_disabled(self, bot_id: int, error_details: str):
+        if not self.control_bot:
+            return
+        try:
+            admins = db_manager.get_postbot_admins(bot_id)
+            bot_row = db_manager.get_postbot(bot_id)
+            bot_name = bot_row[2] if bot_row else f"ID {bot_id}"
+            
+            for adm in admins:
+                user_id = adm[0]
+                lang = db_manager.get_user_lang(user_id)
+                from locales import t
+                msg = t(
+                    'bot_disabled_warning', lang,
+                    username=bot_name,
+                    error=error_details
+                )
+                try:
+                    await self.control_bot.send_message(user_id, msg)
+                except Exception as send_err:
+                    logger.error(f"Failed to send warning to admin {user_id}: {send_err}")
+        except Exception as notify_err:
+            logger.error(f"Error in notify_bot_disabled: {notify_err}")
 
     async def restart_polling(self):
         if self.polling_task:
@@ -224,6 +257,14 @@ class BotManager:
         except Exception as e:
             logger.error(f"Failed to setup bot ID {bot_id} on startup: {e}")
             await bot.session.close()
+            from aiogram.exceptions import TelegramUnauthorizedError
+            is_unauthorized = False
+            if isinstance(e, TelegramUnauthorizedError) or "unauthorized" in str(e).lower() or "token" in str(e).lower():
+                is_unauthorized = True
+            if is_unauthorized:
+                logger.warning(f"Deactivating bot ID {bot_id} in DB due to auth error on startup.")
+                db_manager.update_postbot_active_status(bot_id, 0)
+                await self.notify_bot_disabled(bot_id, str(e))
 
     async def stop_all_bots(self):
         if self.db_check_task:
@@ -289,6 +330,7 @@ async def main():
     
     # Start Control Bot
     control_bot = Bot(token=token, default=DefaultBotProperties(parse_mode="HTML"))
+    bot_manager.control_bot = control_bot
     
     # Set bot commands menu
     try:
