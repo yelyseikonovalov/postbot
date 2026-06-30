@@ -126,19 +126,18 @@ async def cmd_menu(message: Message, state: FSMContext):
 
 # Command /reset
 @control_router.message(Command("reset"))
-async def cmd_reset(message: Message, state: FSMContext):
+async def cmd_reset(message: Message):
     user_id = message.from_user.id
     lang = db_manager.get_user_lang(user_id)
     if not db_manager.is_admin(user_id):
         await message.answer(t('not_authorized', lang))
         return
     
-    await state.clear()
     db_manager.delete_all_promo_codes()
-    await message.answer(t('fsm_reset_success', lang))
+    await message.answer(t('promo_reset_success', lang))
 
 # Callback Help
-@control_router.callback_query(F.data == "ctl_help")
+@control_router.callback_query(F.data.startswith("ctl_help"))
 async def process_help(callback: CallbackQuery):
     user_id = callback.from_user.id
     lang = db_manager.get_user_lang(user_id)
@@ -146,11 +145,40 @@ async def process_help(callback: CallbackQuery):
         await callback.answer(t('not_authorized', lang), show_alert=True)
         return
         
+    page = 0
+    if callback.data.startswith("ctl_help_page_"):
+        try:
+            page = int(callback.data.split("_")[3])
+        except (IndexError, ValueError):
+            page = 0
+            
+    total_pages = 3
+    page = max(0, min(page, total_pages - 1))
+    
+    page_key = f"help_page_{page + 1}"
+    text = t('help_title', lang) + "\n\n" + t(page_key, lang)
+    
     builder = InlineKeyboardBuilder()
+    
+    # Navigation row
+    if page > 0:
+        builder.button(text="⬅️", callback_data=f"ctl_help_page_{page-1}", style="primary")
+    else:
+        builder.button(text=" ", callback_data="dummy")
+        
+    builder.button(text=f"{page+1}/{total_pages}", callback_data="dummy")
+    
+    if page < total_pages - 1:
+        builder.button(text="➡️", callback_data=f"ctl_help_page_{page+1}", style="primary")
+    else:
+        builder.button(text=" ", callback_data="dummy")
+        
     builder.button(text=t('btn_back', lang), callback_data="ctl_main_menu", style="danger")
     
+    builder.adjust(3, 1)
+    
     await callback.message.edit_text(
-        t('help_title', lang) + "\n\n" + t('help_text', lang),
+        text,
         reply_markup=builder.as_markup()
     )
     await callback.answer()

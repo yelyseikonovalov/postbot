@@ -51,6 +51,9 @@ class PostbotStates(StatesGroup):
     promo_text_success = State()
     promo_duration_hours = State()
     promo_text_duration = State()
+    
+    # Edit Chat Title
+    edit_chat_title = State()
 
 def validate_time_range(time_range: str) -> bool:
     normalized = "".join(time_range.split())
@@ -256,21 +259,7 @@ async def process_start(message: Message, bot: Bot, state: FSMContext):
         reply_markup=get_start_keyboard(bot_db_id, user_id, lang)
     )
 
-# Command /reset
-@postbot_router.message(Command("reset"), F.chat.type == ChatType.PRIVATE)
-async def cmd_reset(message: Message, bot: Bot, state: FSMContext):
-    bot_db_id = get_bot_db_id(bot.id)
-    if not bot_db_id:
-        return
-        
-    user_id = message.from_user.id
-    lang = db_manager.get_user_lang(user_id)
-    
-    if not db_manager.is_postbot_admin(bot_db_id, user_id):
-        return
-        
-    await state.clear()
-    await message.answer(t('fsm_reset_success', lang))
+
 
 # Callback Main Menu
 @postbot_router.callback_query(F.data == "pb_main_menu")
@@ -319,7 +308,7 @@ async def cb_set_lang(callback: CallbackQuery, bot: Bot):
     await callback.answer()
 
 # Callback Help
-@postbot_router.callback_query(F.data == "pb_help")
+@postbot_router.callback_query(F.data.startswith("pb_help"))
 async def cb_help(callback: CallbackQuery, bot: Bot):
     bot_db_id = await get_authorized_bot_id(callback, bot)
     if not bot_db_id:
@@ -328,11 +317,40 @@ async def cb_help(callback: CallbackQuery, bot: Bot):
     user_id = callback.from_user.id
     lang = db_manager.get_user_lang(user_id)
     
+    page = 0
+    if callback.data.startswith("pb_help_page_"):
+        try:
+            page = int(callback.data.split("_")[3])
+        except (IndexError, ValueError):
+            page = 0
+            
+    total_pages = 3
+    page = max(0, min(page, total_pages - 1))
+    
+    page_key = f"pb_help_page_{page + 1}"
+    text = t('help_title', lang) + "\n\n" + t(page_key, lang)
+    
     builder = InlineKeyboardBuilder()
+    
+    # Navigation row
+    if page > 0:
+        builder.button(text="⬅️", callback_data=f"pb_help_page_{page-1}", style="primary")
+    else:
+        builder.button(text=" ", callback_data="dummy")
+        
+    builder.button(text=f"{page+1}/{total_pages}", callback_data="dummy")
+    
+    if page < total_pages - 1:
+        builder.button(text="➡️", callback_data=f"pb_help_page_{page+1}", style="primary")
+    else:
+        builder.button(text=" ", callback_data="dummy")
+        
     builder.button(text=t('btn_back', lang), callback_data="pb_main_menu", style="danger")
     
+    builder.adjust(3, 1)
+    
     await callback.message.edit_text(
-        t('help_title', lang) + "\n\n" + t('pb_help_text', lang),
+        text,
         reply_markup=builder.as_markup()
     )
     await callback.answer()
@@ -558,6 +576,7 @@ async def cb_chat_card(callback: CallbackQuery, bot: Bot):
     )
     
     builder = InlineKeyboardBuilder()
+    builder.button(text=t('btn_edit_title', lang), callback_data=f"pb_chat_edit_title_{group_id}_{chat_id}", style="primary")
     builder.button(text=t('btn_transfer', lang), callback_data=f"pb_chat_transfer_{group_id}_{chat_id}", style="primary")
     builder.button(text=t('btn_unlink', lang), callback_data=f"pb_chat_unlink_{group_id}_{chat_id}", style="danger")
     builder.button(text=t('btn_back', lang), callback_data=f"pb_group_chats_{group_id}_page_0", style="primary")
@@ -565,6 +584,70 @@ async def cb_chat_card(callback: CallbackQuery, bot: Bot):
     
     await callback.message.edit_text(text, reply_markup=builder.as_markup())
     await callback.answer()
+
+@postbot_router.callback_query(F.data.startswith("pb_chat_edit_title_"))
+async def cb_chat_edit_title(callback: CallbackQuery, bot: Bot, state: FSMContext):
+    bot_db_id = await get_authorized_bot_id(callback, bot)
+    if not bot_db_id:
+        return
+        
+    lang = db_manager.get_user_lang(callback.from_user.id)
+    parts = callback.data.split("_")
+    group_id = int(parts[4])
+    chat_id = int(parts[5])
+    
+    await state.set_state(PostbotStates.edit_chat_title)
+    await state.update_data(target_group_id=group_id, target_chat_id=chat_id)
+    
+    builder = InlineKeyboardBuilder()
+    builder.button(text=t('btn_cancel', lang), callback_data=f"pb_chat_card_{group_id}_{chat_id}", style="danger")
+    
+    await callback.message.edit_text(t('enter_new_chat_title', lang), reply_markup=builder.as_markup())
+    await callback.answer()
+
+@postbot_router.message(PostbotStates.edit_chat_title)
+async def process_new_chat_title(message: Message, state: FSMContext, bot: Bot):
+    bot_db_id = get_bot_db_id(bot.id)
+    if not bot_db_id:
+        return
+        
+    user_id = message.from_user.id
+    lang = db_manager.get_user_lang(user_id)
+    
+    if not db_manager.is_postbot_admin(bot_db_id, user_id):
+        return
+        
+    new_title = message.text.strip() if message.text else ""
+    if not new_title:
+        await message.answer("❌ Title cannot be empty. Please enter a valid title.")
+        return
+        
+    state_data = await state.get_data()
+    group_id = state_data.get("target_group_id")
+    chat_id = state_data.get("target_chat_id")
+    
+    chat_row = db_manager.get_chat(chat_id, group_id)
+    if not chat_row:
+        await message.answer("Chat not found.")
+        await state.clear()
+        return
+        
+    try:
+        await bot.set_chat_title(chat_id, new_title)
+        db_manager.update_chat_details(chat_id, group_id, new_title, chat_row[3])
+        
+        builder = InlineKeyboardBuilder()
+        builder.button(text="📋 Chat Details", callback_data=f"pb_chat_card_{group_id}_{chat_id}", style="primary")
+        builder.button(text="🤖 Main Menu", callback_data="pb_main_menu", style="primary")
+        builder.adjust(1)
+        
+        await message.answer(t('chat_title_updated', lang), reply_markup=builder.as_markup())
+        await state.clear()
+    except Exception as e:
+        logger.error(f"Failed to set chat title for {chat_id}: {e}")
+        builder = InlineKeyboardBuilder()
+        builder.button(text=t('btn_cancel', lang), callback_data=f"pb_chat_card_{group_id}_{chat_id}", style="danger")
+        await message.answer(f"❌ Failed to change title on Telegram. Make sure the bot has 'Change Channel/Group Info' administrator permission.\n\nError details: {e}", reply_markup=builder.as_markup())
 
 @postbot_router.callback_query(F.data.startswith("pb_chat_unlink_"))
 async def cb_chat_unlink(callback: CallbackQuery, bot: Bot):

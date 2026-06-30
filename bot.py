@@ -53,6 +53,47 @@ class BotManager:
         self.dp_postbot = dp_postbot
         self.running_bots = {}   # bot_id -> Bot
         self.polling_task = None  # asyncio.Task for dynamic polling
+        self.db_check_task = None # asyncio.Task for periodic DB polling
+
+    def start_db_polling(self):
+        if not self.db_check_task:
+            self.db_check_task = asyncio.create_task(self._poll_db_for_new_bots())
+
+    async def _poll_db_for_new_bots(self):
+        while True:
+            try:
+                await asyncio.sleep(10)
+                import db_manager
+                bots = db_manager.get_all_postbots()
+                started_any = False
+                
+                active_bot_ids = set()
+                for bot_row in bots:
+                    bot_id, token, _, proxy, is_active = bot_row
+                    if is_active:
+                        active_bot_ids.add(bot_id)
+                        if bot_id not in self.running_bots:
+                            logger.info(f"Detected new active bot in DB (ID: {bot_id}). Starting dynamically...")
+                            await self._setup_bot_without_restart(bot_id, token, proxy)
+                            started_any = True
+                            
+                to_stop = []
+                for bot_id in list(self.running_bots.keys()):
+                    if bot_id not in active_bot_ids:
+                        logger.info(f"Detected stopped/deleted bot in DB (ID: {bot_id}). Stopping dynamically...")
+                        to_stop.append(bot_id)
+                        
+                for bot_id in to_stop:
+                    bot = self.running_bots.pop(bot_id)
+                    await bot.session.close()
+                    started_any = True
+                    
+                if started_any:
+                    await self.restart_polling()
+            except asyncio.CancelledError:
+                break
+            except Exception as e:
+                logger.error(f"Error in _poll_db_for_new_bots: {e}")
 
     async def start_bot(self, bot_id: int, token: str, proxy: str = None):
         if bot_id in self.running_bots:
@@ -185,6 +226,14 @@ class BotManager:
             await bot.session.close()
 
     async def stop_all_bots(self):
+        if self.db_check_task:
+            self.db_check_task.cancel()
+            try:
+                await self.db_check_task
+            except asyncio.CancelledError:
+                pass
+            self.db_check_task = None
+            
         if self.polling_task:
             self.polling_task.cancel()
             try:
@@ -202,6 +251,7 @@ class BotManager:
 async def on_startup(dispatcher: Dispatcher, bot_manager: BotManager):
     logger.info("Initializing active postbots on startup...")
     await bot_manager.start_all_active_bots()
+    bot_manager.start_db_polling()
 
 async def on_shutdown(dispatcher: Dispatcher, bot_manager: BotManager):
     logger.info("Shutting down all active postbots on shutdown...")

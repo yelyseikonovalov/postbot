@@ -28,6 +28,10 @@ LOCALES = {
         'btn_cancel': "❌ Cancel",
         'btn_skip': "⏭️ Skip",
         'fsm_reset_success': "🧹 State has been successfully reset! You can start again.",
+        'promo_reset_success': "🧹 All issued promo codes have been successfully deleted from the database.",
+        'btn_edit_title': "✏️ Change Title",
+        'enter_new_chat_title': "📝 Enter the new name for this channel/group:",
+        'chat_title_updated': "🟢 Channel/group name has been successfully changed on Telegram and updated in the database!",
         'btn_confirm_delete': "🗑️ Yes, Delete",
         'btn_confirm': "✅ Confirm",
         'btn_posts': "📋 Posts",
@@ -50,26 +54,84 @@ LOCALES = {
         # Help
         'help_title': "ℹ️ <b>Help & Information</b>",
         'help_text': (
-            "ℹ️ <b>Control Bot Guide & Scenarios</b>\n\n"
-            "This bot manages satellite posting bots.\n\n"
-            "📋 <b>Action Scenarios:</b>\n\n"
-            "1️⃣ <b>How to Add a New Postbot:</b>\n"
-            "1. Go to @BotFather, create a bot, and copy its <b>Token</b>. In Bot Settings, make sure <b>Allow Groups?</b> is Enabled, and configure <b>Group Admin Rights</b> and <b>Channel Admin Rights</b> to grant the bot all administrator permissions (including Add New Admins).\n"
-            "2. In this Control Bot, click <b>Bot List</b> -> <b>➕ Add Bot</b>.\n"
-            "3. Send the Telegram ID of the bot's admin.\n"
-            "4. Send their Username (without @).\n"
-            "5. Send the API Token.\n"
-            "6. Send the Proxy URL (http:// or socks5://) or click <b>Skip</b>.\n"
-            "<i>The bot will test the connection and launch!</i>\n\n"
-            "2️⃣ <b>How to Sync Settings Between Bots:</b>\n"
-            "1. Click <b>🔄 Sync Bots</b> on the main menu.\n"
-            "2. Select the <b>Source Bot</b> (where to copy settings/posts from).\n"
-            "3. Select the <b>Target Bot</b> (where to copy to).\n"
-            "4. Confirm synchronization.\n"
-            "<i>(All synced groups on the target bot are disabled by default to avoid double posting).</i>\n\n"
-            "💡 <b>Useful Commands:</b>\n"
-            "• `/start` or `/menu` — opens the main menu and clears the active dialog state.\n"
-            "• `/reset` — forces a full reset of the active dialog state if you are stuck or deleted a chat."
+            """ℹ️ <b>Control Bot Guide & Scenarios</b>
+
+This bot manages satellite posting bots.
+
+📋 <b>Action Scenarios:</b>
+
+1️⃣ <b>How to Add a New Postbot:</b>
+1. Go to @BotFather, create a bot, and copy its <b>Token</b>. In Bot Settings, make sure <b>Allow Groups?</b> is Enabled, and configure <b>Group Admin Rights</b> and <b>Channel Admin Rights</b> to grant the bot all administrator permissions.
+2. In this Control Bot, click <b>Bot List</b> -> <b>➕ Add Bot</b>.
+3. Send the Telegram ID of the bot's admin.
+4. Send their Username (with or without @).
+5. Send the API Token.
+6. Send the Proxy URL (http:// or socks5://) or click <b>Skip</b>.
+<i>The bot will test the connection and launch!</i>
+
+2️⃣ <b>How to Sync Settings Between Bots:</b>
+• <b>Purpose:</b> Quickly copies all post groups, linked channels, settings, and queued posts from a source bot to a target bot.
+• <b>How it works:</b>
+1. Target bot admin status is verified in linked chats.
+2. Postgroups copy as <b>disabled</b> to prevent double posting.
+3. Media posts copy with a 3-second delay to avoid Telegram rate limits.
+
+💡 <b>Useful Commands:</b>
+• `/start` or `/menu` — opens the main menu and clears your active dialog state (FSM) if you are stuck.
+• `/reset` — (Main Admin only) deletes all issued promo codes from the database."""
+        ),
+        'help_page_1': (
+            """ℹ️ <b>Control Bot Guide (Page 1/3)</b>
+
+This bot manages satellite posting bots.
+
+📋 <b>Action Scenarios:</b>
+
+1️⃣ <b>How to Add a New Postbot:</b>
+1. Go to @BotFather, create a bot, and copy its <b>Token</b>. In Bot Settings, make sure <b>Allow Groups?</b> is Enabled, and configure <b>Group Admin Rights</b> and <b>Channel Admin Rights</b> to grant the bot all administrator permissions.
+2. In this Control Bot, click <b>Bot List</b> -> <b>➕ Add Bot</b>.
+3. Send the Telegram ID of the bot's admin.
+4. Send their Username (with or without @).
+5. Send the API Token.
+6. Send the Proxy URL (http:// or socks5://) or click <b>Skip</b>.
+<i>The bot will test the connection and launch!</i>
+
+2️⃣ <b>How to Manage Administrators:</b>
+1. Click <b>👥 Manage Admins</b> on the main menu.
+2. Here you can add or remove administrators who can manage the bots.
+
+💡 <b>Useful Commands:</b>
+• `/start` or `/menu` — opens the main menu and clears your active dialog state (FSM) if you are stuck.
+• `/reset` — (Main Admin only) deletes all issued promo codes from the database."""
+        ),
+        'help_page_2': (
+            """🤖 <b>Using Multiple Bots (Page 2/3)</b>
+
+⏱️ <b>Why add another poster bot?</b>
+• <b>Content Separation:</b> Use different bots for different topics or channels (e.g., one bot for news, another for entertainment or ads).
+• <b>Rate Limits Scaling:</b> Telegram imposes strict rate limits on API requests. Distributing channels across multiple bots avoids rate limit bans and delays.
+• <b>Backup & Migration:</b> Having a secondary bot allows you to quickly redirect broadcasting if the primary bot gets blocked or runs into issues.
+
+📝 <b>What exactly will the second bot post?</b>
+• Each bot operates with its own independent database of postgroups and its own publishing queue.
+• The second bot will only post the content that you queue specifically for it. It will not share posts with the first bot unless you run the sync process."""
+        ),
+        'help_page_3': (
+            """🔄 <b>Bot Synchronization (Page 3/3)</b>
+
+🎯 <b>Purpose:</b>
+Quickly copies all post groups, linked channels, settings (intervals, active hours), and queued posts from a source bot to a target bot (useful for backups, bot migration, or scaling).
+
+⚙️ <b>How it works:</b>
+1. The bot verifies that the target bot has admin rights in all linked channels/groups.
+2. All synced groups on the target bot are created as <b>disabled</b> by default to prevent double posting.
+3. Text posts are copied instantly, while media posts (photos, videos, GIFs) are transferred with a 3-second delay per post to respect Telegram rate limits.
+
+📋 <b>Steps:</b>
+1. Click <b>🔄 Sync Bots</b> on the main menu.
+2. Select the <b>Source Bot</b>.
+3. Select the <b>Target Bot</b>.
+4. Confirm synchronization."""
         ),
         
         # Language Selection
@@ -78,7 +140,7 @@ LOCALES = {
         
         # Add Bot FSM
         'add_bot_start': "👤 <b>Step 1/4:</b> Send the Telegram user ID of the person who will be the administrator/owner of this postbot:",
-        'add_bot_admin_username': "👤 <b>Step 2/4:</b> Send the Telegram username of the postbot administrator:",
+        'add_bot_admin_username': "👤 <b>Step 2/4:</b> Send the Telegram username of the postbot administrator (with or without @):",
         'invalid_admin_id': "❌ Invalid ID! The ID must be a number. Please try again.",
         'add_bot_token': "🔑 <b>Step 3/4:</b> Send the Telegram Bot API Token for the postbot (from @BotFather):",
         'invalid_token': "❌ Invalid token format! It should look like <code>123456789:ABCdefGhIJKlmNoPQRsTUVwxyZ</code>. Please try again.",
@@ -120,7 +182,7 @@ LOCALES = {
         'btn_manage_bot_admins': "👥 Bot Admins",
         'postbot_admin_list_title': "👥 <b>PostBot @{username} Administrators:</b>",
         'cannot_remove_owner': "❌ You cannot remove the original Owner.",
-        'enter_admin_username': "🏷️ Send the Telegram Username of the new administrator:",
+        'enter_admin_username': "🏷️ Send the Telegram Username of the new administrator (with or without @):",
         'admin_card_title': "👤 <b>Administrator Profile</b>",
         'admin_card_details': "🆔 <b>ID:</b> <code>{user_id}</code>\n🏷️ <b>Username:</b> @{username}\n👑 <b>Role:</b> {role}",
         'btn_refresh_admin': "🔄 Refresh Info",
@@ -213,8 +275,50 @@ LOCALES = {
             "3. Click <b>Enable</b> to start monitoring reactions.\n"
             "<i>The bot will automatically publish promo codes when the emoji target is met!</i>\n\n"
             "💡 <b>Useful Commands:</b>\n"
-            "• `/start` or `/menu` — opens the main menu and clears the active dialog state.\n"
-            "• `/reset` — forces a full reset of the active dialog state if you are stuck."
+            "• `/start` or `/menu` — opens the main menu and clears your active dialog state (FSM) if you are stuck."
+        ),
+        'pb_help_page_1': (
+            "ℹ️ <b>Postbot Guide (Page 1/3)</b>\n\n"
+            "This bot automates content posting to your Telegram channels/groups.\n\n"
+            "📋 <b>Action Scenarios:</b>\n\n"
+            "1️⃣ <b>How to Setup Posting to a Channel/Group:</b>\n"
+            "1. Click <b>📦 PostGroups</b> -> <b>➕ Create Group</b>.\n"
+            "2. Enter a name, button layout (or 0), and a unique password/passcode (e.g., <code>mycode123</code>).\n"
+            "3. Set the posting interval (in seconds) and active time window (e.g., <code>09:00-22:00</code>). Confirm creation.\n"
+            "4. Add this bot as an <b>Administrator</b> in your channel/group (with permission to post and delete messages).\n"
+            "5. Send your passcode (e.g., <code>mycode123</code>) directly into the channel/group.\n"
+            "<i>The bot will delete the passcode message and successfully link the chat!</i>\n\n"
+            "2️⃣ <b>How to Queue a New Post:</b>\n"
+            "1. Click <b>📦 PostGroups</b> -> select your Group -> <b>➕ Add Post</b>.\n"
+            "2. Send your content (text, photo, video, or GIF).\n"
+            "3. Attach custom buttons if needed, then click <b>Confirm</b>.\n"
+            "<i>The post is added to the queue and will be published according to the interval.</i>\n\n"
+            "💡 <b>Useful Commands:</b>\n"
+            "• `/start` or `/menu` — opens the main menu and clears your active dialog state (FSM) if you are stuck."
+        ),
+        'pb_help_page_2': (
+            "📋 <b>Posting Queue Scenario & Logic (Page 2/3)</b>\n\n"
+            "⏱️ <b>Purpose:</b>\n"
+            "Automates content publication to multiple Telegram channels and groups, ensuring constant channel activity without manual work.\n\n"
+            "🔄 <b>How it works:</b>\n"
+            "You create a postgroup, link channels/groups to it, and fill the queue with posts. The bot posts them sequentially.\n\n"
+            "⚙️ <b>Logic details:</b>\n"
+            "• <b>Circular Queue:</b> Posts are sent in order. Once the last post is sent, the queue loops back to the first post.\n"
+            "• <b>Intervals:</b> The scheduler checks every 5 seconds. If the time since the last post in a group exceeds the configured interval (e.g. 1 hour / 3600 seconds), a new post is scheduled.\n"
+            "• <b>Active Time Range:</b> Posting only happens within the configured time range (e.g. 09:00-22:00) using the Jerusalem/Israel timezone.\n"
+            "• <b>Independent Tracking:</b> Each connected channel/group tracks its own <code>last_posted_index</code>, meaning they can receive posts at different times or independently."
+        ),
+        'pb_help_page_3': (
+            "🎁 <b>Attention Grabber Scenario (Page 3/3)</b>\n\n"
+            "🎯 <b>Purpose:</b>\n"
+            "Engages the audience, boosts channel activity (reactions), and drives sales by automatically giving out discount coupons.\n\n"
+            "⚡ <b>How it works:</b>\n"
+            "Every N-th post (e.g. every 10 posts) from the queue is automatically converted into a promo post with reaction instructions. The first user to add the trigger emoji gets a unique discount code.\n\n"
+            "⚙️ <b>Logic details:</b>\n"
+            "• <b>Reaction Tracking:</b> The bot monitors reactions on active promo posts.\n"
+            "• <b>Code Generation:</b> When a user reacts with the trigger emoji (and doesn't already have an active code), the bot generates a unique code (e.g. <code>tg-abcdef...</code>) with a random discount within the specified range.\n"
+            "• <b>Temporary Edit:</b> The post text or caption is temporarily updated to congratulate the winner and show the code.\n"
+            "• <b>Auto-Restore:</b> After 180 seconds (3 minutes), a background task automatically restores the original post content and keyboard, and removes the promo post from active status."
         ),
         
         # Toggle Posting
@@ -297,6 +401,10 @@ LOCALES = {
         'btn_cancel': "❌ Отмена",
         'btn_skip': "⏭️ Пропустить",
         'fsm_reset_success': "🧹 Состояние диалога успешно сброшено! Вы можете начать заново.",
+        'promo_reset_success': "🧹 Все выданные промокоды были успешно удалены из базы данных.",
+        'btn_edit_title': "✏️ Изменить название",
+        'enter_new_chat_title': "📝 Введите новое название для этого канала/группы:",
+        'chat_title_updated': "🟢 Название канала/группы успешно изменено в Telegram и обновлено в базе данных!",
         'btn_confirm_delete': "🗑️ Да, удалить",
         'btn_confirm': "✅ Подтвердить",
         'btn_posts': "📋 Посты",
@@ -319,26 +427,84 @@ LOCALES = {
         # Help
         'help_title': "ℹ️ <b>Помощь и информация</b>",
         'help_text': (
-            "ℹ️ <b>Руководство и Сценарии Управления</b>\n\n"
-            "Этот бот предназначен для создания и управления ботами-постерами.\n\n"
-            "📋 <b>Пошаговые Сценарии Действий:</b>\n\n"
-            "1️⃣ <b>Как добавить нового бота-постера:</b>\n"
-            "1. Перейдите в @BotFather, создайте бота и скопируйте его <b>Токен</b>. В настройках бота (Bot Settings) обязательно включите добавление в группы (<b>Allow Groups?</b> -> Enabled), а также зайдите в разделы <b>Group Admin Rights</b> и <b>Channel Admin Rights</b> и предоставьте боту все права администратора, включая право добавления других администраторов (Add New Admins).\n"
-            "2. В этом боте нажмите <b>Список ботов</b> -> <b>➕ Добавить бота</b>.\n"
-            "3. Отправьте Telegram ID пользователя, который будет админом бота.\n"
-            "4. Отправьте его Юзернейм (без символа @).\n"
-            "5. Отправьте API Токен бота.\n"
-            "6. Отправьте прокси (http:// или socks5://) либо нажмите <b>Пропустить</b>.\n"
-            "<i>Бот проверит соединение и запустит постер!</i>\n\n"
-            "2️⃣ <b>Как синхронизировать контент между ботами:</b>\n"
-            "1. В главном меню выберите <b>🔄 Синхронизация ботов</b>.\n"
-            "2. Выберите <b>Исходный бот</b> (откуда копировать настройки и посты).\n"
-            "3. Выберите <b>Целевой бот</b> (куда копировать контент).\n"
-            "4. Подтвердите синхронизацию.\n"
-            "<i>(Группы на целевом боте будут отключены по умолчанию, чтобы избежать двойного постинга).</i>\n\n"
-            "💡 <b>Полезные команды:</b>\n"
-            "• `/start` или `/menu` — открывает главное меню и сбрасывает текущее состояние диалога.\n"
-            "• `/reset` — принудительно сбрасывает состояние диалога, если вы застряли на каком-то шаге."
+            """ℹ️ <b>Руководство Управления & Сценарии</b>
+
+Этот бот предназначен для создания, настройки и координации ваших ботов-постеров.
+
+📋 <b>Сценарии Действий:</b>
+
+1️⃣ <b>Как добавить нового бота-постера:</b>
+1. Перейдите в @BotFather, создайте бота и скопируйте его <b>Токен</b>. В настройках бота обязательно включите добавление в группы (<b>Allow Groups?</b> -> Enabled), а также предоставьте боту все права администратора в разделах Group/Channel Admin Rights.
+2. В этом боте нажмите <b>Список ботов</b> -> <b>➕ Добавить бота</b>.
+3. Отправьте Telegram ID пользователя, который будет админом бота.
+4. Отправьте его Юзернейм (с @ или без).
+5. Отправьте API Токен бота.
+6. Отправьте прокси (http:// или socks5://) либо нажмите <b>Пропустить</b>.
+<i>Бот проверит соединение и запустит постер!</i>
+
+2️⃣ <b>Как синхронизировать настройки между ботами:</b>
+• <b>Для чего это нужно:</b> Быстро переносит все группы постов, привязанные каналы, настройки публикации и очередь постов с одного бота на другого.
+• <b>Как это работает:</b>
+1. Проверяются права целевого бота в привязанных каналах и группах.
+2. Группы постов копируются на целевой бот отключенными для избежания двойного постинга.
+3. Медиафайлы передаются с паузой в 3 секунды на файл во избежание лимитов Telegram.
+
+💡 <b>Полезные команды:</b>
+• `/start` или `/menu` — открывает главное меню и сбрасывает текущее состояние диалога (FSM), если вы застряли.
+• `/reset` — (Только для Главного Админа) полностью удаляет все выданные промокоды из базы данных."""
+        ),
+        'help_page_1': (
+            """ℹ️ <b>Руководство Управления (Страница 1/3)</b>
+
+Этот бот предназначен для создания, настройки и координации ваших ботов-постеров.
+
+📋 <b>Пошаговые Сценарии Действий:</b>
+
+1️⃣ <b>Как добавить нового бота-постера:</b>
+1. Перейдите в @BotFather, создайте бота и скопируйте его <b>Токен</b>. В настройках бота обязательно включите добавление в группы (<b>Allow Groups?</b> -> Enabled), а также предоставьте боту все права администратора в разделах Group/Channel Admin Rights.
+2. В этом боте нажмите <b>Список ботов</b> -> <b>➕ Добавить бота</b>.
+3. Отправьте Telegram ID пользователя, который будет админом бота.
+4. Отправьте его Юзернейм (с @ или без).
+5. Отправьте API Токен бота.
+6. Отправьте прокси (http:// или socks5://) либо нажмите <b>Пропустить</b>.
+<i>Бот проверит соединение и запустит постер!</i>
+
+2️⃣ <b>Как управлять правами администраторов:</b>
+1. В главном меню выберите <b>👥 Управление админами</b>.
+2. Здесь вы можете добавить дополнительных администраторов для управления ботами или просмотреть их список.
+
+💡 <b>Полезные команды:</b>
+• `/start` или `/menu` — открывает главное меню и сбрасывает текущее состояние диалога (FSM), если вы застряли.
+• `/reset` — (Только для Главного Админа) полностью удаляет все выданные промокоды из базы данных."""
+        ),
+        'help_page_2': (
+            """🤖 <b>Использование Нескольких Ботов (Страница 2/3)</b>
+
+⏱️ <b>Зачем добавлять еще одного бота-постера?</b>
+• <b>Разделение контента:</b> Вы можете использовать разных ботов для разных тематик. Например, один бот постит новости, а второй — юмор или рекламу.
+• <b>Обход лимитов:</b> Telegram накладывает жесткие ограничения (Rate Limits) на количество запросов в секунду. Распределив каналы по разным ботам, вы избегаете блокировок и задержек в публикации.
+• <b>Резервное копирование:</b> Наличие второго бота позволяет быстро переключить вещание в случае сбоя или блокировки первого бота.
+
+📝 <b>Что конкретно будет постить второй бот?</b>
+• Каждый бот работает со своей независимой базой групп постов и своей очередью публикаций.
+• Второй бот будет публиковать только тот контент, который вы добавили в его личную очередь. Он никак не пересекается с первым ботом, если вы не запустите процедуру синхронизации."""
+        ),
+        'help_page_3': (
+            """🔄 <b>Синхронизация Ботов (Страница 3/3)</b>
+
+🎯 <b>Для чего это нужно:</b>
+Быстро переносит все группы постов, привязанные каналы, настройки публикации (интервалы, время работы) и очередь постов с одного бота на другого (например, при смене/блокировке бота, создании резервной копии или масштабировании).
+
+⚙️ <b>Как это работает:</b>
+1. Проверяются права целевого бота в привязанных каналах и группах (целевой бот должен быть администратором в этих чатах).
+2. Все группы постов копируются на целевой бот, но по умолчанию создаются <b>отключенными</b>, чтобы избежать одновременного двойного постинга с двух ботов.
+3. Текстовые посты копируются мгновенно, а посты с медиафайлами (фото, видео, GIF) копируются с паузой в 3 секунды на файл во избежание ограничений Telegram (Rate Limits).
+
+📋 <b>Пошаговые действия:</b>
+1. В главном меню выберите <b>🔄 Синхронизация ботов</b>.
+2. Выберите <b>Исходный бот</b> (откуда копировать).
+3. Выберите <b>Целевой бот</b> (куда копировать).
+4. Подтвердите синхронизацию."""
         ),
         
         # Language Selection
@@ -347,7 +513,7 @@ LOCALES = {
         
         # Add Bot FSM
         'add_bot_start': "👤 <b>Шаг 1/4:</b> Отправьте Telegram ID пользователя, который будет администратором/владельцем постбота:",
-        'add_bot_admin_username': "👤 <b>Шаг 2/4:</b> Отправьте юзернейм (Username) администратора постбота:",
+        'add_bot_admin_username': "👤 <b>Шаг 2/4:</b> Отправьте юзернейм (Username) администратора постбота (с @ или без):",
         'invalid_admin_id': "❌ Неверный ID! ID должен состоять только из цифр. Пожалуйста, попробуйте еще раз.",
         'add_bot_token': "🔑 <b>Шаг 3/4:</b> Отправьте API Токен постбота (от @BotFather):",
         'invalid_token': "❌ Неверный формат токена! Пример: <code>123456789:ABCdefGhIJKlmNoPQRsTUVwxyZ</code>. Попробуйте еще раз.",
@@ -389,7 +555,7 @@ LOCALES = {
         'btn_manage_bot_admins': "👥 Админы бота",
         'postbot_admin_list_title': "👥 <b>Администраторы постбота @{username}:</b>",
         'cannot_remove_owner': "❌ Вы не можете удалить первоначального Владельца.",
-        'enter_admin_username': "🏷️ Отправьте юзернейм (Username) нового администратора:",
+        'enter_admin_username': "🏷️ Отправьте юзернейм (Username) нового администратора (с @ или без):",
         'admin_card_title': "👤 <b>Карточка администратора</b>",
         'admin_card_details': "🆔 <b>ID:</b> <code>{user_id}</code>\n🏷️ <b>Username:</b> @{username}\n👑 <b>Role:</b> {role}",
         'btn_refresh_admin': "🔄 Обновить данные",
@@ -482,8 +648,48 @@ LOCALES = {
             "3. Нажмите <b>Включить</b> для активации.\n"
             "<i>Бот будет отслеживать реакции и автоматически выдавать скидочные коды при достижении цели!</i>\n\n"
             "💡 <b>Полезные команды:</b>\n"
-            "• `/start` или `/menu` — открывает главное меню и сбрасывает текущее состояние диалога.\n"
-            "• `/reset` — принудительно сбрасывает состояние диалога, если вы застряли на каком-то шаге."
+            "• `/start` или `/menu` — открывает главное меню и сбрасывает текущее состояние диалога (FSM), если вы застряли.\n"
+            "• `/reset` — (Только для Главного Админа) полностью удаляет все выданные промокоды из базы данных."
+        ),
+        'pb_help_page_1': (
+            "ℹ️ <b>Руководство Пост-Бота (Страница 1/3)</b>\n\n"
+            "Этот бот автоматически публикует контент в ваших каналах и группах.\n\n"
+            "📋 <b>Сценарии Действий:</b>\n\n"
+            "1️⃣ <b>Как настроить автопостинг в канал/группу:</b>\n"
+            "1. Нажмите <b>📦 Группы постов</b> -> <b>➕ Создать группу</b>.\n"
+            "2. Укажите название, шаблон клавиатуры (или 0) и уникальный пароль (например, <code>mycode123</code>).\n"
+            "3. Задайте интервал (в секундах) и время работы (например, <code>09:00-22:00</code>). Подтвердите создание.\n"
+            "4. Добавьте этого бота в ваш канал/группу в качестве <b>Администратора</b> (с правами на публикацию и удаление сообщений).\n"
+            "5. Отправьте секретный пароль (например, <code>mycode123</code>) сообщением прямо в канал или группу.\n"
+            "<i>Бот удалит это сообщение и успешно привяжет чат к вашей группе постов!</i>\n\n"
+            "2️⃣ <b>Как добавить новый пост в очередь:</b>\n"
+            "1. Откройте <b>📦 Группы постов</b> -> Выберите группу -> <b>➕ Добавить пост</b>.\n"
+            "2. Отправьте контент (текст, фото, видео или GIF).\n"
+            "3. При необходимости прикрепите кнопки и нажмите <b>Подтвердить</b>."
+        ),
+        'pb_help_page_2': (
+            "📋 <b>Сценарий и Логика Очереди Постинга (Страница 2/3)</b>\n\n"
+            "⏱️ <b>Для чего это нужно:</b>\n"
+            "Автоматизирует публикацию контента в несколько Telegram-каналов и групп, поддерживая активность аудитории без вашего постоянного участия.\n\n"
+            "🔄 <b>Как это работает:</b>\n"
+            "Вы создаете группу постов, привязываете к ней каналы/группы и наполняете очередь постами. Бот публикует их по очереди.\n\n"
+            "⚙️ <b>Подробная логика:</b>\n"
+            "• <b>Круговая очередь:</b> Посты отправляются по порядку. После публикации последнего поста очередь начинается заново с первого.\n"
+            "• <b>Интервалы:</b> Планировщик проверяет состояние каждые 5 секунд. Новый пост публикуется, если с момента предыдущего прошло заданное время (например, 3600 секунд / 1 час).\n"
+            "• <b>Диапазон времени:</b> Постинг выполняется строго в рамках заданного интервала времени (например, 09:00-22:00) по Иерусалимскому времени (Израиль).\n"
+            "• <b>Независимый трекинг:</b> Каждый подключенный чат в группе постов отслеживает свой <code>last_posted_index</code> индивидуально."
+        ),
+        'pb_help_page_3': (
+            "🎁 <b>Сценарий «Attention Grabber» / Промокоды (Страница 3/3)</b>\n\n"
+            "🎯 <b>Для чего это нужно:</b>\n"
+            "Увеличение вовлеченности аудитории, сбор реакций и стимулирование продаж с помощью персональных скидочных промокодов.\n\n"
+            "⚡ <b>Как это работает:</b>\n"
+            "Каждый N-й пост (например, каждый 10-й) отправляется с призывом поставить реакцию. Первый отреагировавший пользователь получает уникальный купон на скидку.\n\n"
+            "⚙️ <b>Подробная логика:</b>\n"
+            "• <b>Отслеживание реакций:</b> Бот непрерывно мониторит реакции на промо-постах.\n"
+            "• <b>Выдача кода:</b> При обнаружении триггерного эмодзи (если у пользователя еще нет активного кода) бот генерирует код формата <code>tg-abcdef...</code> с рандомной скидкой в заданном диапазоне.\n"
+            "• <b>Временное изменение:</b> Текст или описание поста временно изменяется на поздравление победителя с кодом.\n"
+            "• <b>Восстановление:</b> Через 180 секунд (3 минуты) фоновая задача восстанавливает исходный вид поста, а сам пост удаляется из списка активных промо, чтобы код нельзя было забрать повторно."
         ),
         
         # Toggle Posting
@@ -566,6 +772,10 @@ LOCALES = {
         'btn_cancel': "❌ ביטול",
         'btn_skip': "⏭️ דלג",
         'fsm_reset_success': "🧹 המצב אופס בהצלחה! תוכל להתחיל מחדש.",
+        'promo_reset_success': "🧹 כל קודי הקופון שהופקו נמחקו בהצלחה ממסד הנתונים.",
+        'btn_edit_title': "✏️ שנה שם",
+        'enter_new_chat_title': "📝 הזן את השם החדש עבור ערוץ/קבוצה זו:",
+        'chat_title_updated': "🟢 שם הערוץ/קבוצה שונה בהצלחה בטלגרם ועודכן במסד הנתונים!",
         'btn_confirm_delete': "🗑️ כן, מחק",
         'btn_confirm': "✅ אישור",
         'btn_posts': "📋 פוסטים",
@@ -574,40 +784,164 @@ LOCALES = {
         # Bot Sync
         'sync_select_source': "🔄 <b>בחר בוט מקור:</b>\n\nבחר את הבוט שממנו תרצה להעתיק את כל ההגדרות, הקבוצות והפוסטים.",
         'sync_select_target': "🔄 <b>בחר בוט יעד:</b>\n\nבחר את בוט הגיבוי שאליו תרצה להעתיק את כל התוכן.",
-        'sync_confirm': "🔄 <b>אישור סנכרון</b>\n\n<b>בוט מקור:</b> @{source}\n<b>בוט יעד:</b> @{target}\n\n<i>הערה: כל הקבוצות שיועתקו לבוט היעד יהיו כבויות (לא פעילות) בתחילה כדי למנוע פרסום כפול. פוסטים עם מדיה יועברו עם השהיה של 3 שניות.</i>",
+        'sync_confirm': "🔄 <b>אישור סנכרון</b>\n\n<b>בוט מקור:</b> @{source}\n<b>בוט יעד:</b> @{target}\n\n<i>הערה: כל הקבוצות שיועתקו לבוט היעד יהיו כבויות (לא פעילות) בתחילה כדי למנוע פרсום כפול. פוסטים עם מדיה יועברו עם השהיה של 3 שניות.</i>",
         'sync_in_progress': "🔄 <b>הסנכרון מתבצע...</b>\n\nבודק חיבור לקבוצות, מעתיק הגדרות ומעביר קבצים. נא להמתין, זה עשוי לקחת מספר דקות.",
-        'sync_success': "✅ <b>הסנכרון הושלם בהצלחה!</b>\n\nהקבוצות, ההגדרות והפוסטים הועתקו ל-@{target} (כבויים כברירת מחדל).\n\nקבוצות שסונכרנו: {groups}\nפוסטים שהועתקו: {posts}",
-        'sync_error_missing_chats': "❌ <b>הסנכרון נכשל!</b>\n\nבוט היעד @{target} אינו מוגדר כמנהל או חסר הרשאות בקבוצות הבאות:\n\n{chats}\n\nנא להוסיף את בוט היעד לקבוצות אלו ולנסות שוב.",
+        'sync_success': "✅ <b>הסנכרון הושלם בהצלחה!</b>\n\nהקבוצות, ההגדרות והפוсты הועтקו ל-@{target} (כבויים כברירת מחדל).\n\nקבוצות שסונכרנו: {groups}\nפוסטים שהועתקו: {posts}",
+        'sync_error_missing_chats': "❌ <b>הסנכרון נכсел!</b>\n\nבוט היעד @{target} אינו מוגדר כמנהл או חסר הרשאות בקבוצות הבאות:\n\n{chats}\n\nנא להוסיף את בוט היעד לקבוצות אלו ולנסות שוב.",
         'sync_error_same_bot': "❌ לא ניתן לבחור באותו בוט כמקור וכיעד כאחד.",
         'sync_error_no_groups': "❌ לבוט המקור אין קבוצות מוגדרות להעתקה.",
         'sync_error_not_owner': "❌ עליך להיות הבעלים של שני הבוטים כדי לסנכרן אותם.",
         'sync_step_check': "🔄 <b>שלב 1/3: בודק נוכחות של בוט היעד בקבוצות...</b>",
         'sync_step_groups': "🔄 <b>שלב 2/3: מעתיק קבוצות והגדרות...</b>",
         'sync_step_posts': "🔄 <b>שלב 3/3: מעתיק פוסטים ומעביר קבצים ({current}/{total})...</b>",
-        
+        'pb_help_text': (
+            "ℹ️ <b>מדריך ותסריטי פעולה של בוט הפרסום</b>\n\n"
+            "בוט זה מבצע פרסום אוטומטי של תוכן בערוצים ובקבוצות הטלגרם שלך.\n\n"
+            "📋 <b>תסריטי פעולה שלב אחר שלב:</b>\n\n"
+            "1️⃣ <b>כיצד להגדיר פרסום לערוץ/קבוצה:</b>\n"
+            "1. לחץ על <b>📦 קבוצות פוסטים</b> -> <b>➕ צור קבוצה</b>.\n"
+            "2. הזן שם, פריסת כפתורים (או 0) וסיסמה ייחודית (למשל, <code>mycode123</code>).\n"
+            "3. הגדר את מרווח הפרסום (בשניות) ואת חלון הזמנים (למשל, <code>09:00-22:00</code>). אשר את היצירה.\n"
+            "4. הוסף את הבוט הנוכחי כ-<b>מנהל</b> (Administrator) בערוץ/קבוצה שלך (עם הרשאות לפרסום ומחיקת הודעות).\n"
+            "5. שלח את הסיסמה שלך (למשל, <code>mycode123</code>) כהודעה ישירות בתוך הערוץ/קבוצה.\n"
+            "<i>הבוט ימחק את הודעת הסיסמה ויקשר את הצ'אט בהצלחה!</i>\n\n"
+            "2️⃣ <b>כיצד להוסיף פוסט חדש לתור:</b>\n"
+            "1. לחץ על <b>📦 קבוצות פוסטים</b> -> בחר את הקבוצה שלך -> <b>➕ הוסף פוסט</b>.\n"
+            "2. שלח את התוכן (טקסט, תמונה, סרטון או GIF).\n"
+            "3. צרף כפתורים מותאמים אישית במידת הצורך ולחץ על <b>אישור</b>.\n"
+            "<i>הפוסט יתווסף לתור ויפורסם בהתאם למרווח הזמנים שהוגדר.</i>\n\n"
+            "3️⃣ <b>כיצד להגדיר מבצעי תגובות (Attention Grabber):</b>\n"
+            "1. בחר בקבוצה שלך -> <b>🛠️ הגדרות</b> -> <b>📢 הגדרות קופונים</b> -> <b>⚙️ הגדרת מבצע</b>.\n"
+            "2. בצע את השלבים: הגדר טווח הנחה, אימוג'י להפעלה, משך זמן וטקסטים.\n"
+            "3. לחץ на <b>הפעל</b> כדי להתחיל לעקוב אחר תגובות.\n"
+            "<i>הבוט יפרסם קודי קופון באופן אוטומטי כאשר יעד התגובות יושג!</i>\n\n"
+            "💡 <b>פקודות שימושיות:</b>\n"
+            "• `/start` או `/menu` — פותח את התפריט הראשי ומאפס את מצב השיחה הנוכחי (FSM) אם נתקעת בשלב כלשהו.\n"
+            "• `/reset` — (למנהל הראשי בלבד) מוחק את כל קודי הקופון שהופקו ממסד הנתונים."
+        ),
+        'pb_help_page_1': (
+            "ℹ️ <b>מדריך בוט הפרסומים (עמוד 1/3)</b>\n\n"
+            "בוט זה מפרסם אוטומטית תוכן בערוצים ובקבוצות שלך.\n\n"
+            "📋 <b>תרחישי פעולה:</b>\n\n"
+            "1️⃣ <b>כיצד להגדיר פרסום אוטומטי לערוץ/קבוצה:</b>\n"
+            "1. לחץ על <b>📦 קבוצות פוסטים</b> -> <b>➕ צור קבוצה</b>.\n"
+            "2. הזן שם, תבנית מקלדת ברירת מחדל (או 0) וקוד גישה ייחודי (למשל, <code>mycode123</code>).\n"
+            "3. הגדר את מרווח הפרסום (בשניות) ושעות הפעילות (למשל, <code>09:00-22:00</code>). אשר.\n"
+            "4. הוסף בוט זה לערוץ/קבוצה שלך בתור <b>מנהל (Administrator)</b> עם הרשאות לפרסום ומחיקת הודעות.\n"
+            "5. שלח את קוד הגישה ייחודי שלך (למשל, <code>mycode123</code>) כהודעה ישירות לערוץ/קבוצה.\n"
+            "<i>הבוט ימחק את הודעת הסיסמה ויקשר את הצ'אט בהצלחה!</i>\n\n"
+            "2️⃣ <b>כיצד להוסיף פוסט חדש לתור:</b>\n"
+            "1. פתח את <b>📦 קבוצות פוסטים</b> -> בחר קבוצה -> <b>➕ הוסף פוסט</b>.\n"
+            "2. שלח את התוכן (טקסט, תמונה, וידאו או GIF).\n"
+            "3. צרף כפתורים במידת הצורך ולחץ на <b>אשר</b>.\n\n"
+            "💡 <b>פקודות שימושיות:</b>\n"
+            "• `/start` או `/menu` — פותח את התפריט הראשי ומאפס את מצב השיחה הנוכחי (FSM) אם נתקעת בשלב כלשהו."
+        ),
+        'pb_help_page_2': (
+            "📋 <b>תרחיש ולוגיקת תור הפרסומים (עמוד 2/3)</b>\n\n"
+            "⏱️ <b>מטרה:</b>\n"
+            "אוטומציה של פרסום תוכן במספר ערוצים וקבוצות טלגרם, המבטיחה פעילות קבועה של הערוץ ללא צורך בפרסום ידני.\n\n"
+            "🔄 <b>איך זה עובד:</b>\n"
+            "יוצרים קבוצת פוסטים, מקשרים אליה ערוצים/קבוצות וממלאים את התור בפוסטים. הבוט מפרסם אותם בזה אחר זה.\n\n"
+            "⚙️ <b>פרטי הלוגיקה:</b>\n"
+            "• <b>תור מחזורי:</b> הפוסטים נשלחים לפי הסדר. לאחר פרסום הפוסט האחרון, התור חוזר להתחלה.\n"
+            "• <b>מרווחי זמן (אינטרוול):</b> המתזמן בודק את המצב כל 5 שניות. פוסט חדש נשלח אם הזמן שחלף מאז הפרסום האחרון עולה על המרווח שהוגדר (למשל, 3600 שניות / שעה).\n"
+            "• <b>טווח שעות פעילות:</b> הפרסום מתבצע אך ורק בטווח השעות שהוגדר (למשל, 09:00-22:00) לפי שעון ירושלים/ישראל.\n"
+            "• <b>מעקב עצמאי:</b> כל ערוץ/קבוצה המחוברים לקבוצת הפוסטים עוקבים אחר ה-<code>last_posted_index</code> שלהם באופן עצמאי."
+        ),
+        'pb_help_page_3': (
+            "🎁 <b>תרחיש Attention Grabber / קודי קופון (עמוד 3/3)</b>\n\n"
+            "🎯 <b>מטרה:</b>\n"
+            "הגברת מעורבות הקהל, עידוד תגובות (Reactions) וקידום מכירות באמצעות קודי קופון ייחודיים המוענקים אוטומטית.\n\n"
+            "⚡ <b>איך זה עובד:</b>\n"
+            "כל פוסט מספר N (למשל, כל פוסט עשירי) נשלח עם הוראה להשאיר תגובה (Reaction). המשתמש הראשון שמגיב עם האמוג'י המוגדר מקבל קוד קופון ייחודי להנחה.\n\n"
+            "⚙️ <b>פרטי הלוגיקה:</b>\n"
+            "• <b>מעקב תגובות:</b> הבוט מנטר באופן רציף תגובות על פוסטים פעילים של המבצע.\n"
+            "• <b>יצירת קוד:</b> כאשר מזוהה תגובת הטריגר (ולמשתמש אין עדיין קוד פעיל), הבוט מייצר קוד בפורמט <code>tg-abcdef...</code> עם הנחה אקראית בטווח שהוגדר.\n"
+            "• <b>עריכה זמנית:</b> טקסט או כיתוב הפוסט מתעדכנים זמנית כדי לברך את הזוכה ולהציג את הקוד.\n"
+            "• <b>שחזור אוטומטי:</b> לאחר 180 שניות (3 דקות), משימת רקע משחזרת אוטומטית את הפוסט למצבו המקורי והוא מוסר מרשימת המבצעים הפעילים כדי למנוע זכייה נוספת."
+        ), 
         # Help
         'help_title': "ℹ️ <b>עזרה ומידע</b>",
         'help_text': (
-            "ℹ️ <b>מדריך ותסריטי פעולה של בוט הבקרה</b>\n\n"
-            "בוט זה מיועד ליצירה וניהול מלא של בוטי פרסום לווייניים.\n\n"
-            "📋 <b>תסריטי פעולה שלב אחר שלב:</b>\n\n"
-            "1️⃣ <b>כיצד להוסיף בוט פרסום חדש:</b>\n"
-            "1. היכנס ל-@BotFather, צור בוט חדש והעתק את ה-<b>Token</b> שלו. בהגדרות הבוט (Bot Settings), ודא שמאופשרת הוספה לקבוצות (<b>Allow Groups?</b> -> Enabled), והגדר ב-<b>Group Admin Rights</b> וב-<b>Channel Admin Rights</b> את כל הרשאות הניהול עבור הבוט, כולל הרשאת הוספת מנהלים חדשים (Add New Admins).\n"
-            "2. בבוט הבקרה הנוכחי, לחץ על <b>רשימת בוטים</b> -> <b>➕ הוסף בוט</b>.\n"
-            "3. שלח את מזהה הטלגרם (ID) של מנהל הבוט.\n"
-            "4. שלח את שם המשתמש שלו (ללא הסימן @).\n"
-            "5. שלח את ה-API Token של הבוט.\n"
-            "6. שלח כתובת פרוקסי (http:// או socks5://) או לחץ על <b>דלג</b>.\n"
-            "<i>הבוט יבדוק את החיבור ויפעיל את בוט הפרסום!</i>\n\n"
-            "2️⃣ <b>כיצד לסנכרן הגדרות ותוכן בין בוטים:</b>\n"
-            "1. בתפריט הראשי לחץ על <b>🔄 סנכרון בוטים</b>.\n"
-            "2. בחר את <b>בוט המקור</b> (שממנו יועתקו ההגדרות והפוסטים).\n"
-            "3. בחר את <b>בוט היעד</b> (שאליו יועתקו הנתונים).\n"
-            "4. אשר את הסנכרון.\n"
-            "<i>(כל הקבוצות שיסונכרנו לבוט היעד יהיו כבויות כברירת מחדל כדי למנוע פרסום כפול).</i>\n\n"
-            "💡 <b>פקודות שימושיות:</b>\n"
-            "• `/start` או `/menu` — פותח את התפריט הראשי ומאפס את מצב השיחה הנוכחי.\n"
-            "• `/reset` — מאפס באופן יזום את מצב השיחה אם נתקעת בשלב כלשהו."
+            """ℹ️ <b>מדריך בוט בקרה ותסריטים</b>
+
+בוט זה מיועד ליצירה וניהול מלא של בוטי פרסום לווייניים.
+
+📋 <b>תרחישי פעולה:</b>
+
+1️⃣ <b>כיצד להוסיף בוט פרסום חדש:</b>
+1. עבור אל @BotFather, צור בוט והעתק את <b>הטוקן (Token)</b> שלו. בהגדרות הבוט, ודא כי <b>Allow Groups?</b> מופעל, והגדר את זכויות הניהול בקבוצות ובערוצים כדי להעניק לבוט את כל הרשאות הניהול.
+2. בבוט ניהול זה, לחץ על <b>רשימת בוטים</b> -> <b>➕ הוסף בוט</b>.
+3. שלח את מזהה ה-Telegram (ID) של מנהל הבוט.
+4. שלח את שם המשתמש שלו (עם הסימן @ או בלעדיו).
+5. שלח את טוקן ה-API.
+6. שלח את כתובת הפרוקסי (http:// או socks5://) או לחץ על <b>דלג</b>.
+<i>הבוט יבדוק את החיבור ויופעל!</i>
+
+2️⃣ <b>כיצד לסנכרן הגדרות ותוכן בין בוטים:</b>
+• <b>למה זה נחוץ:</b> מאפשר להעתיק במהירות את כל קבוצות הפוסטים, הערוצים המקושרים, הגדרות הפרסום ותור הפוסטים מבוט אחד לאחר.
+• <b>איך זה עובד:</b>
+1. הבוט בודק שלבוט היעד יש הרשאות מנהל בצ'אטים המקושרים.
+2. קבוצות הפוסטים מועתקות במצב <b>כבוי (disabled)</b> למניעת פרסום כפול.
+3. פוסטים עם מדיה מועתקים בהשהיה של 3 שניות לפוסט כדי למנוע חריגה ממגבלות הקצב של טלגרם.
+
+💡 <b>פקודות שימושיות:</b>
+• `/start` או `/menu` — פותח את התפריט הראשי ומאפס את מצב השיחה הנוכחי (FSM) אם נתקעת בשלב כלשהו.
+• `/reset` — (למנהל הראשי בלבד) מוחק את כל קודי הקופון שהופקו ממסד הנתונים."""
+        ),
+        'help_page_1': (
+            """ℹ️ <b>מדריך בוט ניהול (עמוד 1/3)</b>
+
+בוט זה מיועד ליצירה, הגדרה וניהול מלא של בוטי פרסום לווייניים.
+
+📋 <b>תרחישי פעולה:</b>
+
+1️⃣ <b>כיצד להוסיף בוט פרסום חדש:</b>
+1. עבור אל @BotFather, צור בוט והעתק את <b>הטוקן (Token)</b> שלו. בהגדרות הבוט, ודא כי <b>Allow Groups?</b> מופעל, והגדר את זכויות הניהול בקבוצות ובערוצים כדי להעניק לבוט את כל הרשאות הניהול.
+2. בבוט ניהול זה, לחץ על <b>רשימת בוטים</b> -> <b>➕ הוסף בוט</b>.
+3. שלח את מזהה ה-Telegram (ID) של מנהל הבוט.
+4. שלח את שם המשתמש שלו (עם הסימן @ או בלעדיו).
+5. שלח את טוקן ה-API.
+6. שלח את כתובת הפרוקסי (http:// או socks5://) או לחץ על <b>דלג</b>.
+<i>הבוט יבדוק את החיבור ויופעל!</i>
+
+2️⃣ <b>כיצד לנהל מנהלי מערכת:</b>
+1. לחץ על <b>👥 ניהול מנהלים</b> בתפריט הראשי.
+2. כאן תוכל להוסיף או להסיר מנהלי מערכת שיכולים לנהל את הבוטים.
+
+💡 <b>פקודות שימושיות:</b>
+• `/start` או `/menu` — פותח את התפריט הראשי ומאפס את מצב השיחה הנוכחי (FSM) אם נתקעת בשלב כלשהו.
+• `/reset` — (למנהל הראשי בלבד) מוחק את כל קודי הקופון שהופקו ממסד הנתונים."""
+        ),
+        'help_page_2': (
+            """🤖 <b>שימוש במספר בוטים (עמוד 2/3)</b>
+
+⏱️ <b>למה להוסיף בוט פרסום נוסף?</b>
+• <b>הפרדת תכנים:</b> ניתן להשתמש בבוטים שונים לנושאים או ערוצים שונים (לדוגמה, בוט אחד לחדשות, ואחר לבידור או למודעות).
+• <b>עקיפת מגבלות קצב:</b> טלגרם מטילה מגבלות קצב קשיחות (Rate Limits) על בקשות API. חלוקת הערוצים בין מספר בוטים מונעת חסימות והשהיות בפרסום.
+• <b>גיבוי והגירה:</b> קיומו של בוט משני מאפשר לך להעביר במהירות את השידור במקרה של תקלה או חסימה של הבוט הראשי.
+
+📝 <b>מה בדיוק יפרסם הבוט השני?</b>
+• כל בוט פועל באופן עצמאי לחלוטין עם קבוצות פוסטים ותור פרסומים משלו.
+• הבוט השני יפרסם אך ורק את התוכן שהוספת לתור האישי שלו. הוא לא ישתף פוסטים עם הבוט הראשון אלא אם תפעיל את תהליך הסנכרון."""
+        ),
+        'help_page_3': (
+            """🔄 <b>סנכרון בוטים (עמוד 3/3)</b>
+
+🎯 <b>למה זה נחוץ:</b>
+מאפשר להעתיק במהירות את כל קבוצות הפוסטים, הערוצים המקושרים, הגדרות הפרסום (מרווחי זמן, שעות פעילות) ותור הפוסטים מבוט אחד לאחר (למשל, לצורך גיבוי, החלפת בוט שנחסם או הרחבת הפעילות).
+
+⚙️ <b>איך זה עובד:</b>
+1. הבוט בודק שלבוט היעד יש הרשאות מנהל בערוצים ובקבוצות המקושרים.
+2. קבוצות הפוסטים מועתקות במצב <b>כבוי (disabled)</b> כברירת מחדל כדי למנוע פרסום כפול משני הבוטים.
+3. פוסטים עם טקסט בלבד מועתקים באופן מיידי, בעוד שפוסטים עם מדיה (תמונות, סרטונים, GIFs) מועתקים בהשהיה של 3 שניות לפוסט כדי למנוע חריגה מגבולות קצב הבקשות של טלגרם (Rate Limits).
+
+📋 <b>שלבי ביצוע:</b>
+1. בתפריט הראשי לחץ על <b>🔄 סנכרון בוטים</b>.
+2. בחר את <b>בוט המקור</b>.
+3. בחר את <b>בוט היעד</b>.
+4. אשר את הסנכרון."""
         ),
         
         # Language Selection
@@ -616,7 +950,7 @@ LOCALES = {
         
         # Add Bot FSM
         'add_bot_start': "👤 <b>שלב 1/4:</b> שלח את מזהה הטלגרם של משתמש שיהיה מנהל בוט הפוסטים:",
-        'add_bot_admin_username': "👤 <b>שלב 2/4:</b> שלח את שם המשתמש בטלגרם של מנהל בוט הפוסטים:",
+        'add_bot_admin_username': "👤 <b>שלב 2/4:</b> שלח את שם המשתמש בטלגרם של מנהל בוט הפוסטים (עם הסימן @ או בלעדיו):",
         'invalid_admin_id': "❌ מזהה לא תקין! מזהה חייב להיות מספר. נסה שוב.",
         'add_bot_token': "🔑 <b>שלב 3/4:</b> שלח את טוקן ה-API של הבוט (מ-@BotFather):",
         'invalid_token': "❌ פורמט טוקן לא תקין! נסה שוב.",
@@ -658,7 +992,7 @@ LOCALES = {
         'btn_manage_bot_admins': "👥 מנהלי הבוט",
         'postbot_admin_list_title': "👥 <b>מנהלי בוט הפוסטים @{username}:</b>",
         'cannot_remove_owner': "❌ אינך יכול להסיר את הבעלים המקורי.",
-        'enter_admin_username': "🏷️ שלח את שם המשתמש של המנהל החדש:",
+        'enter_admin_username': "🏷️ שלח את שם המשתמש של המנהל החדש (עם הסימן @ או בלעדיו):",
         'admin_card_title': "👤 <b>כרטיס מנהל</b>",
         'admin_card_details': "🆔 <b>מזהה:</b> <code>{user_id}</code>\n🏷️ <b>שם משתמש:</b> @{username}\n👑 <b>תפקיד:</b> {role}",
         'btn_refresh_admin': "🔄 עדכן נתונים",
@@ -729,32 +1063,6 @@ LOCALES = {
         'timerange_updated': "🟢 טווח השעות לפרסום עודכן בהצלחה!",
         
         # Postbot Help
-        'pb_help_text': (
-            "ℹ️ <b>מדריך ותסריטי פעולה של בוט הפרסום</b>\n\n"
-            "בוט זה מבצע פרסום אוטומטי של תוכן בערוצים ובקבוצות הטלגרם שלך.\n\n"
-            "📋 <b>תסריטי פעולה שלב אחר שלב:</b>\n\n"
-            "1️⃣ <b>כיצד להגדיר פרסום לערוץ/קבוצה:</b>\n"
-            "1. לחץ על <b>📦 קבוצות פוסטים</b> -> <b>➕ צור קבוצה</b>.\n"
-            "2. הזן שם, פריסת כפתורים (או 0) וסיסמה ייחודית (למשל, <code>mycode123</code>).\n"
-            "3. הגדר את מרווח הפרסום (בשניות) ואת חלון הזמנים (למשל, <code>09:00-22:00</code>). אשר את היצירה.\n"
-            "4. הוסף את הבוט הנוכחי כ-<b>מנהל</b> (Administrator) בערוץ/קבוצה שלך (עם הרשאות לפרסום ומחיקת הודעות).\n"
-            "5. שלח את הסיסמה שלך (למשל, <code>mycode123</code>) כהודעה ישירות בתוך הערוץ/קבוצה.\n"
-            "<i>הבוט ימחק את הודעת הסיסמה ויקשר את הצ'אט בהצלחה!</i>\n\n"
-            "2️⃣ <b>כיצד להוסיף פוסט חדש לתור:</b>\n"
-            "1. לחץ על <b>📦 קבוצות פוסטים</b> -> בחר את הקבוצה שלך -> <b>➕ הוסף פוסט</b>.\n"
-            "2. שלח את התוכן (טקסט, תמונה, סרטון או GIF).\n"
-            "3. צרף כפתורים מותאמים אישית במידת הצורך ולחץ על <b>אישור</b>.\n"
-            "<i>הפוסט יתווסף לתור ויפורסם בהתאם למרווח הזמנים שהוגדר.</i>\n\n"
-            "3️⃣ <b>כיצד להגדיר מבצעי תגובות (Attention Grabber):</b>\n"
-            "1. בחר בקבוצה שלך -> <b>🛠️ הגדרות</b> -> <b>📢 הגדרות קופונים</b> -> <b>⚙️ הגדרת מבצע</b>.\n"
-            "2. בצע את השלבים: הגדר טווח הנחה, אימוג'י להפעלה, משך זמן וטקסטים.\n"
-            "3. לחץ על <b>הפעל</b> כדי להתחיל לעקוב אחר תגובות.\n"
-            "<i>הבוט יפרסם קודי קופון באופן אוטומטי כאשר יעד התגובות יושג!</i>\n\n"
-            "💡 <b>פקודות שימושיות:</b>\n"
-            "• `/start` או `/menu` — פותח את התפריט הראשי ומאפס את מצב השיחה הנוכחי.\n"
-            "• `/reset` — מאפס באופן יזום את מצב השיחה אם נתקעת בשלב כלשהו."
-        ),
-        
         # Toggle Posting
         'btn_toggle_posting_on': "🟢 הפעל פרסום",
         'btn_toggle_posting_off': "🔴 השבת פרסום",
