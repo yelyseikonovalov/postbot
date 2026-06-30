@@ -44,5 +44,3 @@ Icon
 *.sln
 *.sw?
 
-# Local guide
-install_guide.html

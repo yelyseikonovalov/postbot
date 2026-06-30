@@ -1,12 +1,81 @@
 # Postbot Ecosystem
 
-Telegram bot system consisting of a Main Control Bot and dynamically spawned satellite posting bots to manage automatic content distribution, schedules, post queues, and promo-reaction triggers.
+Асинхронная экосистема Telegram-ботов для автоматического постинга контента. Состоит из основного управляющего бота (**Control Bot**), динамически запускаемых сателлитных ботов-постеров (**Satellite Bots**), планировщика задач и триггеров на реакции для выдачи скидочных промокодов.
 
-## Deployment on Linux Server
+---
 
-1. Transfer the directory to your server (e.g. `/root/postbot`).
-2. Run the deployment script:
-   ```bash
-   sudo bash deploy.sh
-   ```
-3. Set your production tokens in `.env` and place your database `db.db` in the same directory.
+## Пошаговое руководство по установке на чистый Linux-сервер
+
+Сценарий развертывания бота на чистом сервере Ubuntu/Debian с нуля:
+
+### Шаг 1: Подключение к серверу
+Подключитесь к вашему новому серверу через терминал по SSH:
+```bash
+ssh root@YOUR_SERVER_IP
+```
+
+### Шаг 2: Клонирование репозитория
+Склонируйте репозиторий в папку проекта (например, `/root/postbot`) и перейдите в неё:
+```bash
+git clone https://github.com/yelyseikonovalov/postbot.git
+cd postbot
+```
+
+### Шаг 3: Настройка переменных окружения (`.env`)
+Создайте файл конфигурации:
+```bash
+nano .env
+```
+Вставьте следующие параметры и укажите свои значения:
+```ini
+MAIN_BOT_TOKEN="ВАШ_ТОКЕН_ОСНОВНОГО_БОТА"
+DATABASE_PATH="db.db"
+PASSWORD="СекретныйПарольАдминистратора"
+```
+*Для сохранения изменений в nano нажмите `Ctrl + O`, затем `Enter`, для выхода — `Ctrl + X`.*
+
+### Шаг 4: Перенос существующей базы данных (Опционально)
+Если у вас есть готовый локальный файл базы данных `db.db`, скопируйте его на сервер с помощью утилиты `scp` (выполнять в консоли локального компьютера):
+```bash
+scp db.db root@YOUR_SERVER_IP:/root/postbot/db.db
+```
+*Если вы настраиваете бот впервые, просто пропустите этот шаг. Бот автоматически создаст и проинициализирует чистую БД при первом запуске.*
+
+### Шаг 5: Автоматическая установка и запуск
+Запустите deploy-скрипт. Он автоматически установит нужные системные пакеты (Python3, pip, venv), развернет виртуальное окружение, установит зависимости и настроит автозапуск службы:
+```bash
+sudo bash deploy.sh
+```
+
+---
+
+## Управление фоновой службой бота
+
+Скрипт установки регистрирует службу `postbot.service` в системе управления процессами `systemd`. Бот будет работать в фоновом режиме и автоматически перезапускаться при сбое или перезагрузке сервера.
+
+* **Проверить статус службы:**
+  ```bash
+  sudo systemctl status postbot.service
+  ```
+* **Посмотреть логи вывода в реальном времени:**
+  ```bash
+  sudo journalctl -u postbot.service -f
+  ```
+* **Перезапустить бота:**
+  ```bash
+  sudo systemctl restart postbot.service
+  ```
+* **Остановить бота:**
+  ```bash
+  sudo systemctl stop postbot.service
+  ```
+
+---
+
+## Как подготовить бота-сателлита в Telegram перед добавлением
+
+1. Перейдите к [@BotFather](https://t.me/BotFather) и создайте нового бота с помощью команды `/newbot`. Скопируйте полученный **Token**.
+2. В настройках созданного бота (**Bot Settings**):
+   * Включите поддержку групп: **Allow Groups?** -> *Enabled*.
+   * Откройте разделы **Group Admin Rights** и **Channel Admin Rights** и предоставьте боту все административные права, включая возможность добавления других администраторов (**Add New Admins**).
+3. Теперь вы можете добавить токен в панель управления основного бота и запустить его.
