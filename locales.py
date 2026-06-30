@@ -139,8 +139,8 @@ Quickly copies all post groups, linked channels, settings (intervals, active hou
         'lang_changed': "🟢 Language changed successfully!",
         
         # Add Bot FSM
-        'add_bot_start': "👤 <b>Step 1/4:</b> Send the Telegram user ID of the person who will be the administrator/owner of this postbot:",
-        'add_bot_admin_username': "👤 <b>Step 2/4:</b> Send the Telegram username of the postbot administrator (with or without @):",
+        'add_bot_start': "👤 <b>Step 1/4 (Adding New Bot):</b> Send the Telegram user ID of the person who will be the administrator/owner of this postbot:",
+        'add_bot_admin_username': "👤 <b>Step 2/4 (Adding New Bot):</b> Send the Telegram username of the postbot administrator (with or without @):",
         'invalid_admin_id': "❌ Invalid ID! The ID must be a number. Please try again.",
         'add_bot_token': "🔑 <b>Step 3/4:</b> Send the Telegram Bot API Token for the postbot (from @BotFather):",
         'invalid_token': "❌ Invalid token format! It should look like <code>123456789:ABCdefGhIJKlmNoPQRsTUVwxyZ</code>. Please try again.",
@@ -516,8 +516,8 @@ Quickly copies all post groups, linked channels, settings (intervals, active hou
         'lang_changed': "🟢 Язык успешно изменен!",
         
         # Add Bot FSM
-        'add_bot_start': "👤 <b>Шаг 1/4:</b> Отправьте Telegram ID пользователя, который будет администратором/владельцем постбота:",
-        'add_bot_admin_username': "👤 <b>Шаг 2/4:</b> Отправьте юзернейм (Username) администратора постбота (с @ или без):",
+        'add_bot_start': "👤 <b>Шаг 1/4 (Добавление нового бота):</b> Отправьте Telegram ID пользователя, который будет администратором/владельцем постбота:",
+        'add_bot_admin_username': "👤 <b>Шаг 2/4 (Добавление нового бота):</b> Отправьте юзернейм (Username) администратора постбота (с @ или без):",
         'invalid_admin_id': "❌ Неверный ID! ID должен состоять только из цифр. Пожалуйста, попробуйте еще раз.",
         'add_bot_token': "🔑 <b>Шаг 3/4:</b> Отправьте API Токен постбота (от @BotFather):",
         'invalid_token': "❌ Неверный формат токена! Пример: <code>123456789:ABCdefGhIJKlmNoPQRsTUVwxyZ</code>. Попробуйте еще раз.",
@@ -957,8 +957,8 @@ Quickly copies all post groups, linked channels, settings (intervals, active hou
         'lang_changed': "🟢 השפה שונתה בהצלחה!",
         
         # Add Bot FSM
-        'add_bot_start': "👤 <b>שלב 1/4:</b> שלח את מזהה הטלגרם של משתמש שיהיה מנהל בוט הפוסטים:",
-        'add_bot_admin_username': "👤 <b>שלב 2/4:</b> שלח את שם המשתמש בטלגרם של מנהל בוט הפוסטים (עם הסימן @ או בלעדיו):",
+        'add_bot_start': "👤 <b>שלב 1/4 (הוספת בוט חדש):</b> שלח את מזהה הטלגרם של משתמש שיהיה מנהל בוט הפוסטים:",
+        'add_bot_admin_username': "👤 <b>שלב 2/4 (הוספת בוט חדש):</b> שלח את שם המשתמש בטלגרם של מנהל בוט הפוסטים (עם הסימן @ או בלעדיו):",
         'invalid_admin_id': "❌ מזהה לא תקין! מזהה חייב להיות מספר. נסה שוב.",
         'add_bot_token': "🔑 <b>שלב 3/4:</b> שלח את טוקן ה-API של הבוט (מ-@BotFather):",
         'invalid_token': "❌ פורמט טוקן לא תקין! נסה שוב.",
