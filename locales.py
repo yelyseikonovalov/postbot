@@ -27,6 +27,7 @@ LOCALES = {
         'btn_back': "⬅️ Back",
         'btn_cancel': "❌ Cancel",
         'btn_skip': "⏭️ Skip",
+        'fsm_reset_success': "🧹 State has been successfully reset! You can start again.",
         'btn_confirm_delete': "🗑️ Yes, Delete",
         'btn_confirm': "✅ Confirm",
         'btn_posts': "📋 Posts",
@@ -65,7 +66,10 @@ LOCALES = {
             "2. Select the <b>Source Bot</b> (where to copy settings/posts from).\n"
             "3. Select the <b>Target Bot</b> (where to copy to).\n"
             "4. Confirm synchronization.\n"
-            "<i>(All synced groups on the target bot are disabled by default to avoid double posting).</i>"
+            "<i>(All synced groups on the target bot are disabled by default to avoid double posting).</i>\n\n"
+            "💡 <b>Useful Commands:</b>\n"
+            "• `/start` or `/menu` — opens the main menu and clears the active dialog state.\n"
+            "• `/reset` — forces a full reset of the active dialog state if you are stuck or deleted a chat."
         ),
         
         # Language Selection
@@ -207,7 +211,10 @@ LOCALES = {
             "1. Select your Group -> <b>🛠️ Settings</b> -> <b>📢 Promo Settings</b> -> <b>⚙️ Setup Promo</b>.\n"
             "2. Follow the steps: set discount range, emoji trigger, duration, and texts.\n"
             "3. Click <b>Enable</b> to start monitoring reactions.\n"
-            "<i>The bot will automatically publish promo codes when the emoji target is met!</i>"
+            "<i>The bot will automatically publish promo codes when the emoji target is met!</i>\n\n"
+            "💡 <b>Useful Commands:</b>\n"
+            "• `/start` or `/menu` — opens the main menu and clears the active dialog state.\n"
+            "• `/reset` — forces a full reset of the active dialog state if you are stuck."
         ),
         
         # Toggle Posting
@@ -289,6 +296,7 @@ LOCALES = {
         'btn_back': "⬅️ Назад",
         'btn_cancel': "❌ Отмена",
         'btn_skip': "⏭️ Пропустить",
+        'fsm_reset_success': "🧹 Состояние диалога успешно сброшено! Вы можете начать заново.",
         'btn_confirm_delete': "🗑️ Да, удалить",
         'btn_confirm': "✅ Подтвердить",
         'btn_posts': "📋 Посты",
@@ -327,7 +335,10 @@ LOCALES = {
             "2. Выберите <b>Исходный бот</b> (откуда копировать настройки и посты).\n"
             "3. Выберите <b>Целевой бот</b> (куда копировать контент).\n"
             "4. Подтвердите синхронизацию.\n"
-            "<i>(Группы на целевом боте будут отключены по умолчанию, чтобы избежать двойного постинга).</i>"
+            "<i>(Группы на целевом боте будут отключены по умолчанию, чтобы избежать двойного постинга).</i>\n\n"
+            "💡 <b>Полезные команды:</b>\n"
+            "• `/start` или `/menu` — открывает главное меню и сбрасывает текущее состояние диалога.\n"
+            "• `/reset` — принудительно сбрасывает состояние диалога, если вы застряли на каком-то шаге."
         ),
         
         # Language Selection
@@ -469,7 +480,10 @@ LOCALES = {
             "1. Откройте вашу Группу -> <b>🛠️ Настройки</b> -> <b>📢 Промокоды</b> -> <b>⚙️ Настроить промо</b>.\n"
             "2. Задайте размер скидки, эмодзи-триггер, длительность и тексты уведомлений.\n"
             "3. Нажмите <b>Включить</b> для активации.\n"
-            "<i>Бот будет отслеживать реакции и автоматически выдавать скидочные коды при достижении цели!</i>"
+            "<i>Бот будет отслеживать реакции и автоматически выдавать скидочные коды при достижении цели!</i>\n\n"
+            "💡 <b>Полезные команды:</b>\n"
+            "• `/start` или `/menu` — открывает главное меню и сбрасывает текущее состояние диалога.\n"
+            "• `/reset` — принудительно сбрасывает состояние диалога, если вы застряли на каком-то шаге."
         ),
         
         # Toggle Posting
@@ -551,6 +565,7 @@ LOCALES = {
         'btn_back': "⬅️ חזור",
         'btn_cancel': "❌ ביטול",
         'btn_skip': "⏭️ דלג",
+        'fsm_reset_success': "🧹 המצב אופס בהצלחה! תוכל להתחיל מחדש.",
         'btn_confirm_delete': "🗑️ כן, מחק",
         'btn_confirm': "✅ אישור",
         'btn_posts': "📋 פוסטים",
@@ -589,7 +604,10 @@ LOCALES = {
             "2. בחר את <b>בוט המקור</b> (שממנו יועתקו ההגדרות והפוסטים).\n"
             "3. בחר את <b>בוט היעד</b> (שאליו יועתקו הנתונים).\n"
             "4. אשר את הסנכרון.\n"
-            "<i>(כל הקבוצות שיסונכרנו לבוט היעד יהיו כבויות כברירת מחדל כדי למנוע פרסום כפול).</i>"
+            "<i>(כל הקבוצות שיסונכרנו לבוט היעד יהיו כבויות כברירת מחדל כדי למנוע פרסום כפול).</i>\n\n"
+            "💡 <b>פקודות שימושיות:</b>\n"
+            "• `/start` או `/menu` — פותח את התפריט הראשי ומאפס את מצב השיחה הנוכחי.\n"
+            "• `/reset` — מאפס באופן יזום את מצב השיחה אם נתקעת בשלב כלשהו."
         ),
         
         # Language Selection
@@ -731,7 +749,10 @@ LOCALES = {
             "1. בחר בקבוצה שלך -> <b>🛠️ הגדרות</b> -> <b>📢 הגדרות קופונים</b> -> <b>⚙️ הגדרת מבצע</b>.\n"
             "2. בצע את השלבים: הגדר טווח הנחה, אימוג'י להפעלה, משך זמן וטקסטים.\n"
             "3. לחץ על <b>הפעל</b> כדי להתחיל לעקוב אחר תגובות.\n"
-            "<i>הבוט יפרסם קודי קופון באופן אוטומטי כאשר יעד התגובות יושג!</i>"
+            "<i>הבוט יפרסם קודי קופון באופן אוטומטי כאשר יעד התגובות יושג!</i>\n\n"
+            "💡 <b>פקודות שימושיות:</b>\n"
+            "• `/start` או `/menu` — פותח את התפריט הראשי ומאפס את מצב השיחה הנוכחי.\n"
+            "• `/reset` — מאפס באופן יזום את מצב השיחה אם נתקעת בשלב כלשהו."
         ),
         
         # Toggle Posting

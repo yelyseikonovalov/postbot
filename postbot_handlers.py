@@ -256,6 +256,22 @@ async def process_start(message: Message, bot: Bot, state: FSMContext):
         reply_markup=get_start_keyboard(bot_db_id, user_id, lang)
     )
 
+# Command /reset
+@postbot_router.message(Command("reset"), F.chat.type == ChatType.PRIVATE)
+async def cmd_reset(message: Message, bot: Bot, state: FSMContext):
+    bot_db_id = get_bot_db_id(bot.id)
+    if not bot_db_id:
+        return
+        
+    user_id = message.from_user.id
+    lang = db_manager.get_user_lang(user_id)
+    
+    if not db_manager.is_postbot_admin(bot_db_id, user_id):
+        return
+        
+    await state.clear()
+    await message.answer(t('fsm_reset_success', lang))
+
 # Callback Main Menu
 @postbot_router.callback_query(F.data == "pb_main_menu")
 async def cb_main_menu(callback: CallbackQuery, bot: Bot, state: FSMContext):

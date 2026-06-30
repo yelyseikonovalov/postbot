@@ -89,6 +89,7 @@ def get_main_menu_keyboard(user_id, lang):
 # Command /start
 @control_router.message(Command("start"))
 async def cmd_start(message: Message, state: FSMContext):
+    await state.clear()
     user_id = message.from_user.id
     username = message.from_user.username or "unknown"
     name = message.from_user.full_name
@@ -112,28 +113,29 @@ async def cmd_start(message: Message, state: FSMContext):
             await message.answer(welcome_text)
 
 
-
 # Command /menu
 @control_router.message(Command("menu"))
-async def cmd_menu(message: Message):
+async def cmd_menu(message: Message, state: FSMContext):
     user_id = message.from_user.id
     lang = db_manager.get_user_lang(user_id)
     if not db_manager.is_admin(user_id):
         await message.answer(t('not_authorized', lang))
         return
+    await state.clear()
     await message.answer(t('menu_title', lang), reply_markup=get_main_menu_keyboard(user_id, lang))
 
 # Command /reset
 @control_router.message(Command("reset"))
-async def cmd_reset(message: Message):
+async def cmd_reset(message: Message, state: FSMContext):
     user_id = message.from_user.id
     lang = db_manager.get_user_lang(user_id)
     if not db_manager.is_admin(user_id):
         await message.answer(t('not_authorized', lang))
         return
     
+    await state.clear()
     db_manager.delete_all_promo_codes()
-    await message.answer("🧹 Все выданные промокоды были успешно удалены из базы данных.")
+    await message.answer(t('fsm_reset_success', lang))
 
 # Callback Help
 @control_router.callback_query(F.data == "ctl_help")
