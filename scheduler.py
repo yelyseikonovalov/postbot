@@ -215,6 +215,9 @@ class PostScheduler:
                         logger.debug(f"Could not pin message in chat {chat_id}: {pin_err}")
                         
             except Exception as send_err:
+                from aiogram.exceptions import TelegramUnauthorizedError
+                if isinstance(send_err, TelegramUnauthorizedError) or "unauthorized" in str(send_err).lower():
+                    raise send_err
                 logger.error(f"Failed to post to chat {chat_id} in group {group_id}: {send_err}")
                 err_str = str(send_err).lower()
                 if any(term in err_str for term in ["chat not found", "forbidden", "kicked", "chat was deactivated", "not member of chat"]):

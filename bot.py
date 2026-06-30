@@ -178,8 +178,15 @@ class BotManager:
             bot_row = db_manager.get_postbot(bot_id)
             bot_name = bot_row[2] if bot_row else f"ID {bot_id}"
             
+            recipient_ids = set()
             for adm in admins:
-                user_id = adm[0]
+                recipient_ids.add(adm[0])
+                
+            superadmin = db_manager.get_superadmin()
+            if superadmin:
+                recipient_ids.add(superadmin[0])
+                
+            for user_id in recipient_ids:
                 lang = db_manager.get_user_lang(user_id)
                 from locales import t
                 msg = t(
