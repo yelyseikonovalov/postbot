@@ -76,6 +76,16 @@ This bot manages satellite posting bots.
 2. Postgroups copy as <b>disabled</b> to prevent double posting.
 3. Media posts copy with a 3-second delay to avoid Telegram rate limits.
 
+3️⃣ <b>How to Manage Poster Bot Administrators:</b>
+1. Go to <b>Bot List</b> and select a specific bot.
+2. Click <b>👥 Manage Admins</b> -> <b>➕ Add Admin</b>.
+3. Send the numeric Telegram User ID of the new administrator.
+<i>(The user must first start a chat (/start) with that specific poster bot)</i>.
+
+⚡ <b>Activation, Deactivation & Autodeactivation:</b>
+• <b>Manual Control:</b> On the card of each bot, you can temporarily turn it off (click <b>Deactivate Bot</b>) or enable it back (click <b>Activate Bot</b>).
+• <b>Automatic Deactivation:</b> If Telegram reports that a poster bot's token is invalid or blocked (Unauthorized), the system automatically marks it as <b>Inactive</b>, terminates its background tasks, and alerts the Main Superadmin and the bot's administrators.
+
 💡 <b>Useful Commands:</b>
 • `/start` or `/menu` — opens the main menu and clears your active dialog state (FSM) if you are stuck.
 • `/reset` — (Main Admin only) deletes all issued promo codes from the database."""
@@ -96,9 +106,14 @@ This bot manages satellite posting bots.
 6. Send the Proxy URL (http:// or socks5://) or click <b>Skip</b>.
 <i>The bot will test the connection and launch!</i>
 
-2️⃣ <b>How to Manage Administrators:</b>
-1. Click <b>👥 Manage Admins</b> on the main menu.
-2. Here you can add or remove administrators who can manage the bots.
+2️⃣ <b>Control Bot Administrators:</b>
+• Under <b>👥 Manage Admins</b> on the main menu, you can add administrators who can manage the entire bot ecosystem.
+
+3️⃣ <b>Poster Bot (Satellite) Administrators:</b>
+1. Go to <b>Bot List</b> and select a specific bot.
+2. Click <b>👥 Manage Admins</b> -> <b>➕ Add Admin</b>.
+3. Send the numeric Telegram User ID of the new administrator.
+<i>(The user must first start a chat (/start) with that specific poster bot)</i>.
 
 💡 <b>Useful Commands:</b>
 • `/start` or `/menu` — opens the main menu and clears your active dialog state (FSM) if you are stuck.
@@ -114,7 +129,11 @@ This bot manages satellite posting bots.
 
 📝 <b>What exactly will the second bot post?</b>
 • Each bot operates with its own independent database of postgroups and its own publishing queue.
-• The second bot will only post the content that you queue specifically for it. It will not share posts with the first bot unless you run the sync process."""
+• The second bot will only post the content that you queue specifically for it. It will not share posts with the first bot unless you run the sync process.
+
+⚡ <b>Activation, Deactivation & Autodeactivation:</b>
+• <b>Manual Control:</b> On the card of each bot, you can temporarily turn it off (click <b>Deactivate Bot</b>) to stop posting/polling, or enable it back (click <b>Activate Bot</b>), which tests the connection first.
+• <b>Automatic Deactivation:</b> If Telegram reports that a poster bot's token is invalid or blocked (Unauthorized), the system automatically marks it as <b>Inactive</b>, terminates its background tasks, and alerts the Main Superadmin and the bot's administrators."""
         ),
         'help_page_3': (
             """🔄 <b>Bot Synchronization (Page 3/3)</b>
@@ -453,6 +472,16 @@ Quickly copies all post groups, linked channels, settings (intervals, active hou
 2. Группы постов копируются на целевой бот отключенными для избежания двойного постинга.
 3. Медиафайлы передаются с паузой в 3 секунды на файл во избежание лимитов Telegram.
 
+3️⃣ <b>Как управлять администраторами дочерних ботов:</b>
+1. Перейдите в <b>Список ботов</b> и выберите конкретного бота.
+2. Нажмите <b>👥 Управление админами</b> -> <b>➕ Добавить админа</b>.
+3. Отправьте числовой Telegram User ID нового администратора.
+<i>(Пользователь должен предварительно написать /start вашему дочернему боту)</i>.
+
+⚡ <b>Активация, деактивация и автоотключение:</b>
+• <b>Ручное управление:</b> В карточке каждого бота вы можете временно отключить его (кнопка <b>Деактивировать бота</b>), остановив публикацию и опрос, или включить обратно (кнопка <b>Активировать бота</b>), пройдя проверку связи.
+• <b>Автоотключение при сбое:</b> Если Telegram отзывает токен или блокирует дочернего бота (Unauthorized), система мгновенно переведет его в статус <b>Inactive</b>, остановит его задачи и вышлет предупреждение суперадмину управляющего бота и администраторам этого постера.
+
 💡 <b>Полезные команды:</b>
 • `/start` или `/menu` — открывает главное меню и сбрасывает текущее состояние диалога (FSM), если вы застряли.
 • `/reset` — (Только для Главного Админа) полностью удаляет все выданные промокоды из базы данных."""
@@ -473,9 +502,14 @@ Quickly copies all post groups, linked channels, settings (intervals, active hou
 6. Отправьте прокси (http:// или socks5://) либо нажмите <b>Пропустить</b>.
 <i>Бот проверит соединение и запустит постер!</i>
 
-2️⃣ <b>Как управлять правами администраторов:</b>
-1. В главном меню выберите <b>👥 Управление админами</b>.
-2. Здесь вы можете добавить дополнительных администраторов для управления ботами или просмотреть их список.
+2️⃣ <b>Администраторы управляющего бота:</b>
+• В меню <b>👥 Управление админами</b> вы можете назначить администраторов для управления всей экосистемой ботов.
+
+3️⃣ <b>Администраторы дочерних ботов:</b>
+1. Перейдите в <b>Список ботов</b> и выберите конкретного бота.
+2. Нажмите <b>👥 Управление админами</b> -> <b>➕ Добавить админа</b>.
+3. Отправьте числовой Telegram User ID нового администратора.
+<i>(Пользователь должен предварительно написать /start вашему дочернему боту)</i>.
 
 💡 <b>Полезные команды:</b>
 • `/start` или `/menu` — открывает главное меню и сбрасывает текущее состояние диалога (FSM), если вы застряли.
@@ -491,7 +525,11 @@ Quickly copies all post groups, linked channels, settings (intervals, active hou
 
 📝 <b>Что конкретно будет постить второй бот?</b>
 • Каждый бот работает со своей независимой базой групп постов и своей очередью публикаций.
-• Второй бот будет публиковать только тот контент, который вы добавили в его личную очередь. Он никак не пересекается с первым ботом, если вы не запустите процедуру синхронизации."""
+• Второй бот будет публиковать только тот контент, который вы добавили в его личную очередь. Он никак не пересекается с первым ботом, если вы не запустите процедуру синхронизации.
+
+⚡ <b>Активация, деактивация и автоотключение:</b>
+• <b>Ручное управление:</b> В карточке каждого бота вы можете временно отключить его (кнопка <b>Деактивировать бота</b>), остановив публикацию и опрос, или включить обратно (кнопка <b>Активировать бота</b>), пройдя быструю проверку связи.
+• <b>Автоотключение при сбое:</b> Если Telegram отзывает токен или блокирует дочернего бота, система мгновенно переведет его в статус <b>Inactive</b>, остановит его фоновые задачи и вышлет предупреждение суперадмину и администраторам этого бота."""
         ),
         'help_page_3': (
             """🔄 <b>Синхронизация Ботов (Страница 3/3)</b>
@@ -874,7 +912,7 @@ Quickly copies all post groups, linked channels, settings (intervals, active hou
         'help_text': (
             """ℹ️ <b>מדריך בוט בקרה ותסריטים</b>
 
-בוט זה מיועד ליצירה וניהול מלא של בוטי פרסום לווייניים.
+בוט это מיועד ליצירה וניהול מלא של בוטי פרסום לווייניים.
 
 📋 <b>תרחישי פעולה:</b>
 
@@ -893,6 +931,16 @@ Quickly copies all post groups, linked channels, settings (intervals, active hou
 1. הבוט בודק שלבוט היעד יש הרשאות מנהל בצ'אטים המקושרים.
 2. קבוצות הפוסטים מועתקות במצב <b>כבוי (disabled)</b> למניעת פרסום כפול.
 3. פוסטים עם מדיה מועתקים בהשהיה של 3 שניות לפוסט כדי למנוע חריגה ממגבלות הקצב של טלגרם.
+
+3️⃣ <b>כיצד לנהל מנהלי בוטים לווייניים:</b>
+1. עבור אל <b>רשימת בוטים</b> ובחר את הבוט המבוקש.
+2. לחץ על <b>👥 ניהול מנהלים</b> -> <b>➕ הוסף מנהל</b>.
+3. שלח את מזהה הטלגרם של המנהל החדש.
+<i>(המשתמש חייב לשלוח תחילה /start לבוט הפרסום הספציפי)</i>.
+
+⚡ <b>הפעלה, השבתה והשבתה אוטומטית:</b>
+• <b>שליטה ידנית:</b> בכרטיס של כל בוט, באפשרותך להשבית אותו זמנית (לחיצה על <b>השבת בוט</b>) או להפעיל אותו מחדש (לחיצה על <b>הפעל בוט</b>).
+• <b>השבתה אוטומטית במקרה של שגיאה:</b> אם טלגרם פוסלת את הטוקן או חוסמת את הבוט, המערכת תעביר אותו מיידית לסטטוס <b>Inactive</b>, תעצור את משימות הרקע שלו ותשלח התראה למנהל הראשי ולמנהלי אותו הבוט.
 
 💡 <b>פקודות שימושיות:</b>
 • `/start` או `/menu` — פותח את התפריט הראשי ומאפס את מצב השיחה הנוכחי (FSM) אם נתקעת בשלב כלשהו.
@@ -914,9 +962,14 @@ Quickly copies all post groups, linked channels, settings (intervals, active hou
 6. שלח את כתובת הפרוקסי (http:// או socks5://) או לחץ על <b>דלג</b>.
 <i>הבוט יבדוק את החיבור ויופעל!</i>
 
-2️⃣ <b>כיצד לנהל מנהלי מערכת:</b>
-1. לחץ על <b>👥 ניהול מנהלים</b> בתפריט הראשי.
-2. כאן תוכל להוסיף או להסיר מנהלי מערכת שיכולים לנהל את הבוטים.
+2️⃣ <b>מנהלי בוט בקרה:</b>
+• תחת תפריט <b>👥 ניהול מנהלים</b> בתפריט הראשי, באפשרותך למנות מנהלי מערכת לניהול כל מערכת הבוטים.
+
+3️⃣ <b>מנהלי בוטי לוויין (בוטי פרסום):</b>
+1. עבור אל <b>רשימת בוטים</b> ובחר את הבוט המבוקש.
+2. לחץ על <b>👥 ניהול מנהלים</b> -> <b>➕ הוסף מנהל</b>.
+3. שלח את מזהה ה-Telegram (ID) של המנהל החדש.
+<i>(המשתמש חייב לשלוח תחילה /start לבוט הפרסום הספציפי)</i>.
 
 💡 <b>פקודות שימושיות:</b>
 • `/start` או `/menu` — פותח את התפריט הראשי ומאפס את מצב השיחה הנוכחי (FSM) אם נתקעת בשלב כלשהו.
@@ -932,7 +985,11 @@ Quickly copies all post groups, linked channels, settings (intervals, active hou
 
 📝 <b>מה בדיוק יפרסם הבוט השני?</b>
 • כל בוט פועל באופן עצמאי לחלוטין עם קבוצות פוסטים ותור פרסומים משלו.
-• הבוט השני יפרסם אך ורק את התוכן שהוספת לתור האישי שלו. הוא לא ישתף פוסטים עם הבוט הראשון אלא אם תפעיל את תהליך הסנכרון."""
+• הבוט השני יפרסם אך ורק את התוכן שהוספת לתור האישי שלו. הוא לא ישתף פוסטים עם הבוט הראשון אלא אם תפעיל את תהליך הסנכרון.
+
+⚡ <b>הפעלה, השבתה והשבתה אוטומטית:</b>
+• <b>שליטה ידנית:</b> בכרטיס של כל בוט, באפשרותך להשבית אותו זמנית (לחיצה על <b>השבת בוט</b>) כדי לעצור פרסום וסריקת עדכונים, או להפעיל אותו מחדש (לחיצה על <b>הפעל בוט</b>) לאחר בדיקת חיבור מהירה.
+• <b>השבתה אוטומטית במקרה של שגיאה:</b> אם טלגרם פוסלת את הטוקן או חוסמת את הבוט, המערכת תעביר אותו מיידית לסטטוס <b>Inactive</b>, תעצור את משימות הרקע שלו ותשלח התראה למנהל הראשי ולמנהלי אותו הבוט."""
         ),
         'help_page_3': (
             """🔄 <b>סנכרון בוטים (עמוד 3/3)</b>
