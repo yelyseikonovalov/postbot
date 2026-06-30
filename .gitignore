@@ -43,3 +43,6 @@ Icon
 *.njsproj
 *.sln
 *.sw?
+
+# Local guide
+install_guide.html
